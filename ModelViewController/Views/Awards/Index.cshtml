@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ModelViewController.DAL.Entities.Award>
+
+@{
+    ViewData["Title"] = "Awards";
+}
+
+<h1>Awards</h1>
+
+<p>
+    <a class="btn btn-success btn-sm" asp-action="Create">
+        <i class="fa fa-plus"></i>
+        Create
+    </a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <img style='width:80px; height:auto;' src="@item.Image" />
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary"><i class='fas fa-pencil-alt'></i></a> |
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="fa fa-info"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
