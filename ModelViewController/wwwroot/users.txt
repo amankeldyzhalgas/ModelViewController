@@ -1,0 +1,2 @@
+Name: Админ Birthdate: 16.10.1994 0:00:00 Photo: /img/users/clouds.jpg
+Name: Zhalgas Birthdate: 16.10.1994 0:00:00 Photo: /img/users/trava.jpg

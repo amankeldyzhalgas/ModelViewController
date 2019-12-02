@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ModelViewController.DAL.Entities;
 using ModelViewController.Services.Abstract;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -159,6 +160,24 @@ namespace ModelViewController.Controllers
         {
             await _repository.Remove(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Download()
+        {
+            var path = Path.Combine(
+                           Directory.GetCurrentDirectory(),
+                           "wwwroot", "users.txt");
+            using (var stream = new FileStream(path, FileMode.OpenOrCreate))
+            {
+                foreach (var item in _repository.GetAll())
+                {
+                    var str = $"Name: {item.Name} Birthdate: {item.Birthdate} Photo: {item.Photo}\n";
+                    byte[] array = System.Text.Encoding.Default.GetBytes(str);
+                    stream.Write(array, 0, array.Length);
+                }
+            }
+
+            return PhysicalFile(path, "text/plain", "users.txt");
         }
 
         private bool UserExists(Guid id)
