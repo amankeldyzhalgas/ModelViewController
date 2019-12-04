@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ModelViewController.DAL.Entities;
+using ModelViewController.Models;
 using ModelViewController.Services.Abstract;
 using System;
 using System.IO;
@@ -60,6 +62,7 @@ namespace ModelViewController.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
+            ViewData["Awards"] = _awardRepository.GetAll();
             return View();
         }
 
@@ -68,18 +71,30 @@ namespace ModelViewController.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Birthdate")] User user, IFormFile photo)
+        public async Task<IActionResult> Create(UserModel model)
         {
             if (ModelState.IsValid)
             {
-                await _repository.Add(user);
-                if (photo != null)
+                if (model.Birthdate > DateTime.Now || DateTime.Now.Year - 150 > model.Birthdate.Year)
                 {
-                    await _repository.AddFile(user, photo);
+                    ModelState.AddModelError("", "The age of the user can not be negative, can not be more than 150 years.");
+                    return View(model);
+                }
+                var user = new User { Name = model.Name, Birthdate = model.Birthdate };
+                await _repository.Add(user);
+                if (model.Photo != null)
+                {
+                    await _repository.AddFile(user, model.Photo);
+                }
+                if(model.Awards != null)
+                {
+                    //add awards
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+
+            ViewData["Awards"] = _awardRepository.GetAll();
+            return View(model);
         }
 
         // GET: Users/Edit/5
@@ -91,11 +106,12 @@ namespace ModelViewController.Controllers
             }
 
             var user = await _repository.Find(id);
+            var model = new UserModel { Id = user.Id, Name = user.Name, Birthdate = user.Birthdate };
             if (user == null)
             {
                 return NotFound();
             }
-            return View(user);
+            return View(model);
         }
 
         // POST: Users/Edit/5
@@ -103,9 +119,9 @@ namespace ModelViewController.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Birthdate,Photo")] User user, IFormFile photo, int[] selectedAwards)
+        public async Task<IActionResult> Edit(Guid id, UserModel model)
         {
-            if (id != user.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
@@ -114,15 +130,18 @@ namespace ModelViewController.Controllers
             {
                 try
                 {
+                    var user = await _repository.Find(id);
+                    user.Name = model.Name;
+                    user.Birthdate = model.Birthdate;
                     await _repository.Update(user);
-                    if (photo != null)
+                    if (model.Photo != null)
                     {
-                        await _repository.AddFile(user, photo);
+                        await _repository.AddFile(user, model.Photo);
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
+                    if (!UserExists(model.Id))
                     {
                         return NotFound();
                     }
@@ -133,7 +152,7 @@ namespace ModelViewController.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(model);
         }
 
         // GET: Users/Delete/5

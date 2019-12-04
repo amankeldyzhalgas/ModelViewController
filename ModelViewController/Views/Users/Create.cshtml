@@ -1,5 +1,5 @@
-﻿@using ModelViewController.DAL.Entities
-@model User
+﻿@using ModelViewController.Models
+@model UserModel
 
 @{
     ViewData["Title"] = "Create";
@@ -9,8 +9,9 @@
 
 <h4>User</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -20,11 +21,28 @@
             </div>
             <div class="form-group">
                 <label asp-for="Birthdate" class="control-label"></label>
-                <input asp-for="Birthdate" type="date" class="form-control" />
+                <input asp-for="Birthdate" class="form-control" />
                 <span asp-validation-for="Birthdate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="file" name="photo" /><br>
+                <label asp-for="Photo" class="control-label"></label>
+                <input asp-for="Photo" class="form-control" />
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    @foreach (var award in ViewBag.Awards)
+                    {
+                        <div class="col-md-3">
+                            <div class="custom-control custom-checkbox image-checkbox">
+                                <input type="checkbox" name="Awards" value="@award.Id" id="@award.Id" class="custom-control-input" />
+                                <label class="custom-control-label" for="@award.Id">
+                                    <img class="img-fluid" src="@award.Image" title="@award.Title" />
+                                </label>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

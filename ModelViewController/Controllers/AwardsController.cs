@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModelViewController.DAL.Entities;
+using ModelViewController.Models;
 using ModelViewController.Services.Abstract;
 using System;
 using System.Linq;
@@ -52,18 +53,19 @@ namespace ModelViewController.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description")] Award award, IFormFile image)
+        public async Task<IActionResult> Create(AwardModel model)
         {
             if (ModelState.IsValid)
             {
+                var award = new Award { Title = model.Title, Description = model.Description };
                 await _repository.Add(award);
-                if (image != null)
+                if (model.Image != null)
                 {
-                    await _repository.AddFile(award, image);
+                    await _repository.AddFile(award, model.Image);
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(award);
+            return View(model);
         }
 
         // GET: Awards/Edit/5
