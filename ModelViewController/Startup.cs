@@ -1,27 +1,46 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using ModelViewController.DAL;
-using ModelViewController.DAL.Entities;
-using ModelViewController.Services;
-using ModelViewController.Services.Abstract;
+﻿// <copyright file="Startup.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ModelViewController
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using ModelViewController.DAL;
+    using ModelViewController.DAL.Entities;
+    using ModelViewController.Services;
+    using ModelViewController.Services.Abstract;
+
+    /// <summary>
+    /// Startup class.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">configuration.</param>
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
+        /// <summary>
+        /// Gets Configuration.
+        /// </summary>
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+
+        /// <summary>
+        /// ConfigureServices method.
+        /// </summary>
+        /// <param name="services">services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
@@ -31,9 +50,8 @@ namespace ModelViewController
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
             string connection = @"Server=(localdb)\mssqllocaldb;Database=dbMVC;Trusted_Connection=True;";
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection)); 
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
             services.AddScoped<IRepository<User>, UserRepository>();
             services.AddScoped<IRepository<Award>, AwardRepository>();
 
@@ -41,6 +59,12 @@ namespace ModelViewController
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+        /// <summary>
+        /// Configure.
+        /// </summary>
+        /// <param name="app">IApplicationBuilder.</param>
+        /// <param name="env">IHostingEnvironment.</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -50,6 +74,7 @@ namespace ModelViewController
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

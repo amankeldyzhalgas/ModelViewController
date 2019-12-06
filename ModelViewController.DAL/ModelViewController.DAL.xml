@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ModelViewController.DAL</name>
+    </assembly>
+    <members>
+        <member name="T:ModelViewController.DAL.ApplicationContext">
+            <summary>
+            Application Context.
+            </summary>
+        </member>
+        <member name="M:ModelViewController.DAL.ApplicationContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{ModelViewController.DAL.ApplicationContext})">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.DAL.ApplicationContext"/> class.
+            </summary>
+            <param name="options">DbContextOptions.</param>
+        </member>
+        <member name="P:ModelViewController.DAL.ApplicationContext.Users">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.ApplicationContext.Awards">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="M:ModelViewController.DAL.ApplicationContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            OnModelCreating method.
+            </summary>
+            <param name="modelBuilder">ModelBuilder.</param>
+        </member>
+        <member name="T:ModelViewController.DAL.Entities.Award">
+            <summary>
+            Award class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.Award.Id">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.Award.Title">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.Award.Description">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.Award.Image">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.Award.UserAwards">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="M:ModelViewController.DAL.Entities.Award.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.DAL.Entities.Award"/> class.
+            .
+            </summary>
+        </member>
+        <member name="T:ModelViewController.DAL.Entities.User">
+            <summary>
+            User class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.User.Id">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.User.Name">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.User.Birthdate">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.User.Photo">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.User.UserAwards">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="M:ModelViewController.DAL.Entities.User.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.DAL.Entities.User"/> class.
+            </summary>
+        </member>
+        <member name="T:ModelViewController.DAL.Entities.UserAward">
+            <summary>
+            UserAward class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.UserAward.UserId">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.UserAward.User">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.UserAward.AwardId">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.UserAward.Award">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+    </members>
+</doc>

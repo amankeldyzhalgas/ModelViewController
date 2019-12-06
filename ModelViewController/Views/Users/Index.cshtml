@@ -2,9 +2,8 @@
 
 @{
     ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
-
-<h1>Users</h1>
 
 <p>
     <a class="btn btn-success btn-sm" asp-action="Create">
@@ -16,6 +15,8 @@
     <thead>
         <tr>
             <th>
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -25,7 +26,7 @@
                 @Html.DisplayName("Age")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Photo)
+                @Html.DisplayName("Awards")
             </th>
             <th></th>
         </tr>
@@ -33,25 +34,37 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Birthdate)
-                </td>
-                <td>
-                    @(DateTime.Now.Year - item.Birthdate.Year)
-                </td>
-                <td>
-                    <img style='width:80px; height:auto;' src="@item.Photo" />
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary"><i class='fas fa-pencil-alt'></i></a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="fa fa-info"></i></a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                <img style='width:80px; height:auto;' src="@item.Photo"  class="rounded-circle"/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Birthdate)
+            </td>
+            <td>
+                @(DateTime.Now.Year - item.Birthdate.Year)
+            </td>
+            <td>
+                <div class="row">
+                        @foreach (var award in item.UserAwards)
+                        {
+                            <p>
+                                <div class="custom-control custom-checkbox image-checkbox">
+                                    <img style='width:80px; height:auto;' class="img-thumbnail" src="@award.Award.Image" title="@award.Award.Title" />
+                                </div>
+                            </p>
+                        }
+                </div>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary"><i class='fas fa-pencil-alt'></i></a> |
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="fa fa-info"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

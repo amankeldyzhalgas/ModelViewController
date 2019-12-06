@@ -2,15 +2,14 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
-
-<h1>Edit</h1>
 
 <h4>User</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data"  class="form-horizontal">
+    <div class="col-md-6">
+        <form asp-action="Edit" enctype="multipart/form-data" class="form-horizontal">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -27,12 +26,22 @@
                 <label asp-for="Photo" class="control-label"></label>
                 <input asp-for="Photo" class="form-control" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
-                @*@if (Model.Photo != null)
-        {
-            <input asp-for="Photo" type="hidden" />
-            <img style='width:300px; height:auto;' src="@Model.Photo" alt="Photo" /><br />
-        }
-        <input type="file" name="photo" />*@
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    @foreach (var award in ViewBag.Awards)
+                    {
+                        <div class="col-md-3">
+                            <div class="custom-control custom-checkbox image-checkbox">
+                                <input type="checkbox" name="Awards" value="@award.Id" id="@award.Id" class="custom-control-input" 
+                                       @(Model.Awards.Contains(award.Id) ?  "checked=\"checked\"" : "")/>
+                                <label class="custom-control-label" for="@award.Id">
+                                    <img class="img-fluid" src="@award.Image" title="@award.Title" />
+                                </label>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -45,12 +54,3 @@
 <div>
 </div>
 
-
-@section Scripts{
-    <script>
-        $('#dltPhoto').click(function () {
-            $('#Photo').val('')
-            document.getElementById('img').src='';
-        });
-    </script>
-}

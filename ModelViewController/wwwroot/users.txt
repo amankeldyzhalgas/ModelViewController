@@ -1,2 +1,9 @@
-Name: Админ Birthdate: 16.10.1994 0:00:00 Photo: /img/users/clouds.jpg
-Name: Zhalgas Birthdate: 16.10.1994 0:00:00 Photo: /img/users/trava.jpg
+Name: Жалгас Birthdate: 11.11.2011 0:00:00 Photo: /img/users/clouds.jpg
+Awards
+Title: First place Title: Third place Title: First place 
+Name: Руслан Birthdate: 11.11.1988 0:00:00 Photo: /img/users/trava.jpg
+Awards
+Title: First place Title: Second place Title: Third place Title: Third place Title: First place Title: Second place 
+Name: Жалгас Birthdate: 19.06.1994 0:00:00 Photo: /img/users/clouds.jpg
+Awards
+Title: Second place Title: Third place 

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ModelViewController.Services.Abstract</name>
+    </assembly>
+    <members>
+        <member name="T:ModelViewController.Services.Abstract.IRepository`1">
+            <summary>
+            IRepository interface.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IRepository`1.Add(`0)">
+            <summary>
+            Add method.
+            </summary>
+            <param name="item">item.</param>
+            <returns>task item.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IRepository`1.Remove(System.Guid)">
+            <summary>
+            Remove method.
+            </summary>
+            <param name="id">id.</param>
+            <returns>task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IRepository`1.Update(`0)">
+            <summary>
+            Update method.
+            </summary>
+            <param name="item">item.</param>
+            <returns>task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IRepository`1.GetAll">
+            <summary>
+            GetAll method.
+            </summary>
+            <returns>item.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IRepository`1.GetAllAsync">
+            <summary>
+            GetAllAsync method.
+            </summary>
+            <returns>list item.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IRepository`1.Find(System.Nullable{System.Guid})">
+            <summary>
+            Find method.
+            </summary>
+            <param name="id">id.</param>
+            <returns>item.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IRepository`1.AddFile(`0,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            AddFile method.
+            </summary>
+            <param name="item">item.</param>
+            <param name="uploadedFile">IFormFile.</param>
+            <returns>task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IRepository`1.RemoveFile(System.String)">
+            <summary>
+            RemoveFile method.
+            </summary>
+            <param name="path">path.</param>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IRepository`1.UpdateUserAwards(`0,System.Collections.Generic.List{System.Guid})">
+            <summary>
+            UpdateUserAwards method.
+            </summary>
+            <param name="item">item.</param>
+            <param name="list">list.</param>
+            <returns>task.</returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ModelViewController.Services</name>
+    </assembly>
+    <members>
+        <member name="T:ModelViewController.Services.AwardRepository">
+            <summary>
+            .
+            </summary>
+        </member>
+        <member name="M:ModelViewController.Services.AwardRepository.#ctor(ModelViewController.DAL.ApplicationContext,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.Services.AwardRepository"/> class.
+            </summary>
+            <param name="context">ApplicationContext.</param>
+            <param name="appEnvironment">IHostingEnvironment.</param>
+        </member>
+        <member name="M:ModelViewController.Services.AwardRepository.Add(ModelViewController.DAL.Entities.Award)">
+            <summary>
+            Add method.
+            </summary>
+            <param name="award">Award.</param>
+            <returns>award.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.AwardRepository.Find(System.Nullable{System.Guid})">
+            <summary>
+            Find method.
+            </summary>
+            <param name="id">id.</param>
+            <returns>award.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.AwardRepository.GetAll">
+            <summary>
+            GetAll method.
+            </summary>
+            <returns>awards.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.AwardRepository.GetAllAsync">
+            <summary>
+            GetAllAsync method.
+            </summary>
+            <returns>awards.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.AwardRepository.Remove(System.Guid)">
+            <summary>
+            Remove method.
+            </summary>
+            <param name="id">id.</param>
+            <returns>Task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.AwardRepository.Update(ModelViewController.DAL.Entities.Award)">
+            <summary>
+            Update method.
+            </summary>
+            <param name="award">award.</param>
+            <returns>Task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.AwardRepository.AddFile(ModelViewController.DAL.Entities.Award,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            AddFile method.
+            </summary>
+            <param name="award">awawrd.</param>
+            <param name="uploadedFile">IFormFile.</param>
+            <returns>Task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.AwardRepository.RemoveFile(System.String)">
+            <summary>
+            RemoveFile method.
+            </summary>
+            <param name="path">path.</param>
+        </member>
+        <member name="M:ModelViewController.Services.AwardRepository.UpdateUserAwards(ModelViewController.DAL.Entities.Award,System.Collections.Generic.List{System.Guid})">
+            <summary>
+            NotImplemented.
+            </summary>
+            <param name="item">Award.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns><param name="list">Guid list.</param>
+        </member>
+        <member name="T:ModelViewController.Services.UserRepository">
+            <summary>
+            UserRepository.
+            </summary>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.#ctor(ModelViewController.DAL.ApplicationContext,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.Services.UserRepository"/> class.
+            </summary>
+            <param name="context">ApplicationContext.</param>
+            <param name="appEnvironment">IHostingEnvironment.</param>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.Add(ModelViewController.DAL.Entities.User)">
+            <summary>
+            Add method.
+            </summary>
+            <param name="user">User.</param>
+            <returns>user.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.Find(System.Nullable{System.Guid})">
+            <summary>
+            Find method.
+            </summary>
+            <param name="id">id.</param>
+            <returns>user.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.GetAll">
+            <summary>
+            GetAll method.
+            </summary>
+            <returns>user.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.GetAllAsync">
+            <summary>
+            GetAllAsync method.
+            </summary>
+            <returns>user.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.Remove(System.Guid)">
+            <summary>
+            Remove method.
+            </summary>
+            <param name="id">id.</param>
+            <returns>task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.Update(ModelViewController.DAL.Entities.User)">
+            <summary>
+            Update method.
+            </summary>
+            <param name="user">User.</param>
+            <returns>task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.AddFile(ModelViewController.DAL.Entities.User,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            AddFile method.
+            </summary>
+            <param name="user">User.</param>
+            <param name="uploadedFile">IFormFile.</param>
+            <returns>task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.AddAwards(ModelViewController.DAL.Entities.User,System.Collections.Generic.List{ModelViewController.DAL.Entities.Award})">
+            <summary>
+            AddAwards method.
+            </summary>
+            <param name="user">User.</param>
+            <param name="awards">Awards.</param>
+            <returns>task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.RemoveFile(System.String)">
+            <summary>
+            RemoveFile method.
+            </summary>
+            <param name="path">path.</param>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.UpdateUserAwards(ModelViewController.DAL.Entities.User,System.Collections.Generic.List{System.Guid})">
+            <summary>
+            UpdateUserAwards method.
+            </summary>
+            <param name="user">User.</param>
+            <param name="awards">Awards.</param>
+            <returns>task.</returns>
+        </member>
+    </members>
+</doc>
