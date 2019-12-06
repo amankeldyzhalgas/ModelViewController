@@ -112,6 +112,12 @@
             </summary>
             <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the result of the asynchronous operation.</returns>
         </member>
+        <member name="M:ModelViewController.Controllers.UsersController.AwardDetails(ModelViewController.DAL.Entities.Award)">
+            <summary>
+            .
+            </summary>
+            <returns>Partial view.</returns>
+        </member>
         <member name="M:ModelViewController.Controllers.UsersController.Details(System.Nullable{System.Guid})">
             <summary>
             .
