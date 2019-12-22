@@ -15,6 +15,7 @@ namespace ModelViewController
     using ModelViewController.DAL.Entities;
     using ModelViewController.Services;
     using ModelViewController.Services.Abstract;
+    using SmartBreadcrumbs.Extensions;
 
     /// <summary>
     /// Startup class.
@@ -56,6 +57,12 @@ namespace ModelViewController
             services.AddScoped<IRepository<Award>, AwardRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddBreadcrumbs(this.GetType().Assembly, options =>
+            {
+                // Testing
+                options.DontLookForDefaultNode = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,6 +95,19 @@ namespace ModelViewController
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                /*routes.MapRoute(
+                    name: "user",
+                    template: "user/{id}/{action}",
+                    defaults: new { controller = "Users", action = "Details" });
+                routes.MapRoute(
+                    name: "user-create",
+                    template: "create-user",
+                    defaults: new { controller = "Users", action = "Create" });
+                routes.MapRoute(
+                    name: "user-filter",
+                    template: "users/{name}",
+                    defaults: new { controller = "Users", action = "Filter" });*/
             });
         }
     }

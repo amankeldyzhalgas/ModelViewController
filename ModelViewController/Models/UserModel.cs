@@ -40,6 +40,11 @@ namespace ModelViewController.Models
         public IFormFile Photo { get; set; }
 
         /// <summary>
+        /// Gets or sets PhotoSrc.
+        /// </summary>
+        public string PhotoSrc { get; set; }
+
+        /// <summary>
         /// Gets or sets Awards.
         /// </summary>
         public List<Guid> Awards { get; set; }

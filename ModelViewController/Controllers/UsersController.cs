@@ -13,10 +13,12 @@ namespace ModelViewController.Controllers
     using ModelViewController.DAL.Entities;
     using ModelViewController.Models;
     using ModelViewController.Services.Abstract;
+    using SmartBreadcrumbs.Attributes;
 
     /// <summary>
     /// Users Controller.
     /// </summary>
+    [Breadcrumb("Users")]
     public class UsersController : Controller
     {
         private readonly IRepository<User> _repository;
@@ -44,6 +46,17 @@ namespace ModelViewController.Controllers
             return this.View(await this._repository.GetAllAsync());
         }
 
+        /*
+        /// <summary>
+        /// .
+        /// </summary>
+        /// <param name="name">name.</param>
+        /// <returns>users.</returns>
+        public async Task<IActionResult> Filter(string name)
+        {
+            return this.View(await this._repository.Filter(name));
+        }*/
+
         // GET: Users/Details/5
 
         /// <summary>
@@ -51,6 +64,7 @@ namespace ModelViewController.Controllers
         /// </summary>
         /// <param name="id">User Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [Breadcrumb("Details")]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -73,6 +87,7 @@ namespace ModelViewController.Controllers
         /// .
         /// </summary>
         /// <returns>Create View.</returns>
+        [Breadcrumb("Create")]
         public IActionResult Create()
         {
             this.ViewData["Awards"] = this._awardRepository.GetAll();
@@ -90,6 +105,7 @@ namespace ModelViewController.Controllers
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Breadcrumb("Create")]
         public async Task<IActionResult> Create(UserModel model)
         {
             if (this.ModelState.IsValid)
@@ -97,6 +113,8 @@ namespace ModelViewController.Controllers
                 if (model.Birthdate > DateTime.Now || DateTime.Now.Year - 150 > model.Birthdate.Year)
                 {
                     this.ModelState.AddModelError(string.Empty, "The age of the user can not be negative, can not be more than 150 years.");
+
+                    this.ViewData["Awards"] = this._awardRepository.GetAll();
                     return this.View(model);
                 }
 
@@ -127,6 +145,7 @@ namespace ModelViewController.Controllers
         /// </summary>
         /// <param name="id">User Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [Breadcrumb("Edit")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -135,7 +154,7 @@ namespace ModelViewController.Controllers
             }
 
             var user = await this._repository.Find(id);
-            var model = new UserModel { Id = user.Id, Name = user.Name, Birthdate = user.Birthdate, Awards = user.UserAwards.Select(ua => ua.AwardId).ToList() };
+            var model = new UserModel { Id = user.Id, Name = user.Name, Birthdate = user.Birthdate, PhotoSrc = user.Photo, Awards = user.UserAwards.Select(ua => ua.AwardId).ToList() };
             if (user == null)
             {
                 return this.NotFound();
@@ -157,6 +176,7 @@ namespace ModelViewController.Controllers
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Breadcrumb("Edit")]
         public async Task<IActionResult> Edit(Guid id, UserModel model)
         {
             if (id != model.Id)
@@ -207,6 +227,7 @@ namespace ModelViewController.Controllers
         /// </summary>
         /// <param name="id">User Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [Breadcrumb("Delete")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -259,6 +280,7 @@ namespace ModelViewController.Controllers
                         {
                             str += $"Title: {award.Award.Title} ";
                         }
+
                         str += $"{Environment.NewLine}";
                     }
                     else

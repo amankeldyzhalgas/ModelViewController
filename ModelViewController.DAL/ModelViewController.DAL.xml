@@ -67,6 +67,21 @@
             .
             </summary>
         </member>
+        <member name="T:ModelViewController.DAL.Entities.Role">
+            <summary>
+            Role class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.Role.Id">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.Role.RoleName">
+            <summary>
+            Gets or sets .
+            </summary>
+        </member>
         <member name="T:ModelViewController.DAL.Entities.User">
             <summary>
             User class.

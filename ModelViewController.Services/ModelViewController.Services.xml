@@ -42,6 +42,13 @@
             </summary>
             <returns>awards.</returns>
         </member>
+        <member name="M:ModelViewController.Services.AwardRepository.Filter(System.String)">
+            <summary>
+            GetAllAsync method.
+            </summary>
+            <param name="param">param.</param>
+            <returns>awards.</returns>
+        </member>
         <member name="M:ModelViewController.Services.AwardRepository.Remove(System.Guid)">
             <summary>
             Remove method.
@@ -113,6 +120,13 @@
             <summary>
             GetAllAsync method.
             </summary>
+            <returns>user.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.Filter(System.String)">
+            <summary>
+            GetAllAsync method.
+            </summary>
+            <param name="param">param.</param>
             <returns>user.</returns>
         </member>
         <member name="M:ModelViewController.Services.UserRepository.Remove(System.Guid)">

@@ -23,23 +23,29 @@
                 <span asp-validation-for="Birthdate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <img id="img" style='width:200px; height:auto;' class="img-thumbnail" src="@Model.PhotoSrc" />
+            </div>
+            <div class="form-group">
                 <label asp-for="Photo" class="control-label"></label>
                 <input asp-for="Photo" class="form-control" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <div class="row">
-                    @foreach (var award in ViewBag.Awards)
+                    @if (ViewBag.Awards != null)
                     {
-                        <div class="col-md-3">
-                            <div class="custom-control custom-checkbox image-checkbox">
-                                <input type="checkbox" name="Awards" value="@award.Id" id="@award.Id" class="custom-control-input" 
-                                       @(Model.Awards.Contains(award.Id) ?  "checked=\"checked\"" : "")/>
-                                <label class="custom-control-label" for="@award.Id">
-                                    <img class="img-fluid" src="@award.Image" title="@award.Title" />
-                                </label>
+                        foreach (var award in ViewBag.Awards)
+                        {
+                            <div class="col-md-3">
+                                <div class="custom-control custom-checkbox image-checkbox">
+                                    <input type="checkbox" name="Awards" value="@award.Id" id="@award.Id" class="custom-control-input"
+                                           @(Model.Awards.Contains(award.Id) ? "checked=\"checked\"" : "") />
+                                    <label class="custom-control-label" for="@award.Id">
+                                        <img class="img-fluid" src="@award.Image" title="@award.Title" />
+                                    </label>
+                                </div>
                             </div>
-                        </div>
+                        }
                     }
                 </div>
             </div>
@@ -51,6 +57,22 @@
     </div>
 </div>
 
-<div>
-</div>
+@section Scripts {
+    <script type="text/javascript">        
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+            
+                reader.onload = function (e) {
+                    $('#img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#Photo").change(function(){
+            readURL(this);
+        });
+    </script>
+}
+
 

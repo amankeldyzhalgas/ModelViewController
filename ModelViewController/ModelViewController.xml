@@ -112,12 +112,6 @@
             </summary>
             <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the result of the asynchronous operation.</returns>
         </member>
-        <member name="M:ModelViewController.Controllers.UsersController.AwardDetails(ModelViewController.DAL.Entities.Award)">
-            <summary>
-            .
-            </summary>
-            <returns>Partial view.</returns>
-        </member>
         <member name="M:ModelViewController.Controllers.UsersController.Details(System.Nullable{System.Guid})">
             <summary>
             .
@@ -236,6 +230,11 @@
         <member name="P:ModelViewController.Models.UserModel.Photo">
             <summary>
             Gets or sets Photo.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.UserModel.PhotoSrc">
+            <summary>
+            Gets or sets PhotoSrc.
             </summary>
         </member>
         <member name="P:ModelViewController.Models.UserModel.Awards">

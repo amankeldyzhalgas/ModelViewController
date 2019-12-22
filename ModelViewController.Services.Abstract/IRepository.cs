@@ -12,7 +12,7 @@ namespace ModelViewController.Services.Abstract
     /// <summary>
     /// IRepository interface.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Object.</typeparam>
     public interface IRepository<T>
     {
         /// <summary>
@@ -47,6 +47,13 @@ namespace ModelViewController.Services.Abstract
         /// </summary>
         /// <returns>list item.</returns>
         Task<List<T>> GetAllAsync();
+
+        /// <summary>
+        /// Filter method.
+        /// </summary>
+        /// <param name="param">param.</param>
+        /// <returns>list item.</returns>
+        Task<List<T>> Filter(string param);
 
         /// <summary>
         /// Find method.

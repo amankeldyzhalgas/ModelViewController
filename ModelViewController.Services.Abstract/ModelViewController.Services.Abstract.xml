@@ -8,7 +8,7 @@
             <summary>
             IRepository interface.
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="T">Object.</typeparam>
         </member>
         <member name="M:ModelViewController.Services.Abstract.IRepository`1.Add(`0)">
             <summary>
@@ -41,6 +41,13 @@
             <summary>
             GetAllAsync method.
             </summary>
+            <returns>list item.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IRepository`1.Filter(System.String)">
+            <summary>
+            Filter method.
+            </summary>
+            <param name="param">param.</param>
             <returns>list item.</returns>
         </member>
         <member name="M:ModelViewController.Services.Abstract.IRepository`1.Find(System.Nullable{System.Guid})">

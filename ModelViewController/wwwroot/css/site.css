@@ -95,3 +95,25 @@ body {
 .form-group-image-checkbox.is-invalid .invalid-feedback {
   display: block;
 }
+
+.breadcrumb {
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    list-style: none;
+    background-color: #f5f5f5;
+    border-radius: 4px
+}
+
+    .breadcrumb > li {
+        display: inline-block
+    }
+
+        .breadcrumb > li + li:before {
+            padding: 0 5px;
+            color: #ccc;
+            content: "/ "
+        }
+
+    .breadcrumb > .active {
+        color: #777
+    }

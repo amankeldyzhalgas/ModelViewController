@@ -13,10 +13,12 @@ namespace ModelViewController.Controllers
     using ModelViewController.DAL.Entities;
     using ModelViewController.Models;
     using ModelViewController.Services.Abstract;
+    using SmartBreadcrumbs.Attributes;
 
     /// <summary>
     /// Awards Controller.
     /// </summary>
+    [Breadcrumb("Awards")]
     public class AwardsController : Controller
     {
         private readonly IRepository<Award> _repository;
@@ -48,6 +50,7 @@ namespace ModelViewController.Controllers
         /// </summary>
         /// <param name="id">Award Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [Breadcrumb("Details")]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -70,6 +73,7 @@ namespace ModelViewController.Controllers
         /// .
         /// </summary>
         /// <returns>Create View.</returns>
+        [Breadcrumb("Create")]
         public IActionResult Create()
         {
             return this.View();
@@ -110,6 +114,7 @@ namespace ModelViewController.Controllers
         /// </summary>
         /// <param name="id">Award Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [Breadcrumb("Edit")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -181,6 +186,7 @@ namespace ModelViewController.Controllers
         /// </summary>
         /// <param name="id">Award Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [Breadcrumb("Delete")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)

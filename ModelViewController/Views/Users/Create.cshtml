@@ -30,16 +30,19 @@
             </div>
             <div class="form-group">
                 <div class="row">
-                    @foreach (var award in ViewBag.Awards)
+                    @if (ViewBag.Awards != null)
                     {
-                        <div class="col-md-3">
-                            <div class="custom-control custom-checkbox image-checkbox">
-                                <input type="checkbox" name="Awards" value="@award.Id" id="@award.Id" class="custom-control-input" />
-                                <label class="custom-control-label" for="@award.Id">
-                                    <img class="img-fluid" src="@award.Image" title="@award.Title" />
-                                </label>
+                        foreach (var award in ViewBag.Awards)
+                        {
+                            <div class="col-md-3">
+                                <div class="custom-control custom-checkbox image-checkbox">
+                                    <input type="checkbox" name="Awards" value="@award.Id" id="@award.Id" class="custom-control-input" />
+                                    <label class="custom-control-label" for="@award.Id">
+                                        <img class="img-fluid" src="@award.Image" title="@award.Title" />
+                                    </label>
+                                </div>
                             </div>
-                        </div>
+                        }
                     }
                 </div>
             </div>

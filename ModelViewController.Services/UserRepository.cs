@@ -77,6 +77,20 @@ namespace ModelViewController.Services
         }
 
         /// <summary>
+        /// GetAllAsync method.
+        /// </summary>
+        /// <param name="param">param.</param>
+        /// <returns>user.</returns>
+        public async Task<List<User>> Filter(string param)
+        {
+            return await this._context.Users
+                .Include(u => u.UserAwards)
+                .ThenInclude(ua => ua.Award)
+                .Where(u => u.Name.StartsWith(param))
+                .ToListAsync();
+        }
+
+        /// <summary>
         /// Remove method.
         /// </summary>
         /// <param name="id">id.</param>

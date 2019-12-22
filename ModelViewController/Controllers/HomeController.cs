@@ -7,10 +7,12 @@ namespace ModelViewController.Controllers
     using System.Diagnostics;
     using Microsoft.AspNetCore.Mvc;
     using ModelViewController.Models;
+    using SmartBreadcrumbs.Attributes;
 
     /// <summary>
     /// .
     /// </summary>
+    [Breadcrumb("Home")]
     public class HomeController : Controller
     {
         /// <summary>
