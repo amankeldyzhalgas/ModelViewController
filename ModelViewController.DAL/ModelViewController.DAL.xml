@@ -17,12 +17,17 @@
         </member>
         <member name="P:ModelViewController.DAL.ApplicationContext.Users">
             <summary>
-            Gets or sets .
+            Gets or sets Users.
             </summary>
         </member>
         <member name="P:ModelViewController.DAL.ApplicationContext.Awards">
             <summary>
-            Gets or sets .
+            Gets or sets Awards.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.ApplicationContext.Roles">
+            <summary>
+            Gets or sets Roles.
             </summary>
         </member>
         <member name="M:ModelViewController.DAL.ApplicationContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
@@ -64,7 +69,7 @@
         <member name="M:ModelViewController.DAL.Entities.Award.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:ModelViewController.DAL.Entities.Award"/> class.
-            .
+            Constructor.
             </summary>
         </member>
         <member name="T:ModelViewController.DAL.Entities.Role">
@@ -74,12 +79,28 @@
         </member>
         <member name="P:ModelViewController.DAL.Entities.Role.Id">
             <summary>
-            Gets or sets .
+            Gets or sets Id.
             </summary>
         </member>
-        <member name="P:ModelViewController.DAL.Entities.Role.RoleName">
+        <member name="P:ModelViewController.DAL.Entities.Role.Name">
             <summary>
-            Gets or sets .
+            Gets or sets Name.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.Role.DisplayName">
+            <summary>
+            Gets or sets DisplayName.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.Role.UserRoles">
+            <summary>
+            Gets or sets UserRoles.
+            </summary>
+        </member>
+        <member name="M:ModelViewController.DAL.Entities.Role.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.DAL.Entities.Role"/> class.
+            Constructor.
             </summary>
         </member>
         <member name="T:ModelViewController.DAL.Entities.User">
@@ -89,27 +110,42 @@
         </member>
         <member name="P:ModelViewController.DAL.Entities.User.Id">
             <summary>
-            Gets or sets .
+            Gets or sets Id.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.User.UserName">
+            <summary>
+            Gets or sets UserName.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.User.Password">
+            <summary>
+            Gets or sets Password.
             </summary>
         </member>
         <member name="P:ModelViewController.DAL.Entities.User.Name">
             <summary>
-            Gets or sets .
+            Gets or sets Name.
             </summary>
         </member>
         <member name="P:ModelViewController.DAL.Entities.User.Birthdate">
             <summary>
-            Gets or sets .
+            Gets or sets Birthdate.
             </summary>
         </member>
         <member name="P:ModelViewController.DAL.Entities.User.Photo">
             <summary>
-            Gets or sets .
+            Gets or sets Photo.
             </summary>
         </member>
         <member name="P:ModelViewController.DAL.Entities.User.UserAwards">
             <summary>
             Gets or sets .
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.User.UserRoles">
+            <summary>
+            Gets or sets UserRoles.
             </summary>
         </member>
         <member name="M:ModelViewController.DAL.Entities.User.#ctor">
@@ -124,22 +160,47 @@
         </member>
         <member name="P:ModelViewController.DAL.Entities.UserAward.UserId">
             <summary>
-            Gets or sets .
+            Gets or sets UserId.
             </summary>
         </member>
         <member name="P:ModelViewController.DAL.Entities.UserAward.User">
             <summary>
-            Gets or sets .
+            Gets or sets User.
             </summary>
         </member>
         <member name="P:ModelViewController.DAL.Entities.UserAward.AwardId">
             <summary>
-            Gets or sets .
+            Gets or sets AwardId.
             </summary>
         </member>
         <member name="P:ModelViewController.DAL.Entities.UserAward.Award">
             <summary>
-            Gets or sets .
+            Gets or sets Award.
+            </summary>
+        </member>
+        <member name="T:ModelViewController.DAL.Entities.UserRole">
+            <summary>
+            UserRole class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.UserRole.UserId">
+            <summary>
+            Gets or sets UserId.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.UserRole.User">
+            <summary>
+            Gets or sets User.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.UserRole.RoleId">
+            <summary>
+            Gets or sets RoleId.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.DAL.Entities.UserRole.Role">
+            <summary>
+            Gets or sets Role.
             </summary>
         </member>
     </members>

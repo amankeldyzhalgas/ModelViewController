@@ -1,4 +1,4 @@
-﻿// <copyright file="UserAward.cs" company="PlaceholderCompany">
+﻿// <copyright file="UserRole.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,9 +7,9 @@ namespace ModelViewController.DAL.Entities
     using System;
 
     /// <summary>
-    /// UserAward class.
+    /// UserRole class.
     /// </summary>
-    public class UserAward
+    public class UserRole
     {
         /// <summary>
         /// Gets or sets UserId.
@@ -22,13 +22,13 @@ namespace ModelViewController.DAL.Entities
         public virtual User User { get; set; }
 
         /// <summary>
-        /// Gets or sets AwardId.
+        /// Gets or sets RoleId.
         /// </summary>
-        public Guid AwardId { get; set; }
+        public Guid RoleId { get; set; }
 
         /// <summary>
-        /// Gets or sets Award.
+        /// Gets or sets Role.
         /// </summary>
-        public virtual Award Award { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

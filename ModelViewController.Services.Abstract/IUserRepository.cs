@@ -8,12 +8,13 @@ namespace ModelViewController.Services.Abstract
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
+    using ModelViewController.DAL.Entities;
 
     /// <summary>
     /// IRepository interface.
     /// </summary>
     /// <typeparam name="T">Object.</typeparam>
-    public interface IRepository<T>
+    public interface IUserRepository<T>
     {
         /// <summary>
         /// Add method.
@@ -56,6 +57,20 @@ namespace ModelViewController.Services.Abstract
         Task<List<T>> Filter(string param);
 
         /// <summary>
+        /// GetUserRoles method.
+        /// </summary>
+        /// <param name="id">id.</param>
+        /// <returns>roles.</returns>
+        Task<List<Role>> GetUserRoles(Guid? id);
+
+        /// <summary>
+        /// GetUserAwards method.
+        /// </summary>
+        /// <param name="id">id.</param>
+        /// <returns>awards.</returns>
+        Task<List<Award>> GetUserAwards(Guid? id);
+
+        /// <summary>
         /// Find method.
         /// </summary>
         /// <param name="id">id.</param>
@@ -82,6 +97,6 @@ namespace ModelViewController.Services.Abstract
         /// <param name="item">item.</param>
         /// <param name="list">list.</param>
         /// <returns>task.</returns>
-        Task UpdateUserAwards(T item, List<Guid> list);
+        Task UpdateUserAwards(T item, List<Award> list);
     }
 }

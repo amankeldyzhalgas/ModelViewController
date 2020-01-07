@@ -1,0 +1,34 @@
+﻿@model ModelViewController.Models.Users.ChangeUserRolesModel
+@{
+    ViewData["Title"] = "ChangeRole";
+}
+
+<h2>Changing roles for the "@Model.UserName" user</h2>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="ChangeRole" class="form-horizontal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserId" />
+            @if (Model.Roles != null)
+            {
+                foreach (var role in Model.Roles)
+                {
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="@role.Id" id="@role.Id"
+                                   @(Model.UserRoles.Contains(role) ? "checked=\"checked\"" : "") />
+                            <label class="form-check-label" for="@role.Id">
+                                @role.DisplayName
+                            </label>
+                        </div>
+                    </div>
+                }
+            }
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <button asp-action="Index" class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+

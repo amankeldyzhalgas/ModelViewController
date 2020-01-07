@@ -1,0 +1,40 @@
+﻿@model ModelViewController.Models.AddAwardModel
+
+@{
+    ViewData["Title"] = "AddAwards";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<h1>AddAwards</h1>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="AddAwards" enctype="multipart/form-data" class="form-horizontal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserId" />
+            <div class="form-group">
+                <div class="row">
+                    @if (Model.Awards != null)
+                    {
+                        foreach (var award in Model.Awards)
+                        {
+                            <div class="col-md-3">
+                                <div class="custom-control custom-checkbox image-checkbox">
+                                    <input type="checkbox" name="Awards" value="@award.Id" id="@award.Id" class="custom-control-input"
+                                           @(Model.UserAwards.Contains(award) ? "checked=\"checked\"" : "") />
+                                    <label class="custom-control-label" for="@award.Id">
+                                        <img class="img-fluid" src="@award.Image" title="@award.Title" />
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <button asp-action="Index" class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+

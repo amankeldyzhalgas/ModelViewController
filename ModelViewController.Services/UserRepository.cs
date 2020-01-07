@@ -19,7 +19,7 @@ namespace ModelViewController.Services
     /// <summary>
     /// UserRepository.
     /// </summary>
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IUserRepository<User>
     {
         private readonly ApplicationContext _context;
         private readonly IHostingEnvironment _appEnvironment;
@@ -55,13 +55,19 @@ namespace ModelViewController.Services
         /// <returns>user.</returns>
         public async Task<User> Find(Guid? id)
         {
-            return await this._context.Users.Include(u => u.UserAwards).ThenInclude(ua => ua.Award).Where(u => u.Id == id).FirstOrDefaultAsync();
+            return await this._context.Users
+                .Include(u => u.UserAwards)
+                .ThenInclude(ua => ua.Award)
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .Where(u => u.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         /// <summary>
         /// GetAll method.
         /// </summary>
-        /// <returns>user.</returns>
+        /// <returns>users.</returns>
         public List<User> GetAll()
         {
             return this._context.Users.Include(u => u.UserAwards).ThenInclude(ua => ua.Award).ToList();
@@ -70,10 +76,34 @@ namespace ModelViewController.Services
         /// <summary>
         /// GetAllAsync method.
         /// </summary>
-        /// <returns>user.</returns>
+        /// <returns>users.</returns>
         public async Task<List<User>> GetAllAsync()
         {
             return await this._context.Users.Include(u => u.UserAwards).ThenInclude(ua => ua.Award).ToListAsync();
+        }
+
+        /// <summary>
+        /// GetUserRoles.
+        /// </summary>
+        /// <param name="id">id.</param>
+        /// <returns>roles.</returns>
+        public async Task<List<Role>> GetUserRoles(Guid? id)
+        {
+            var user = await this.Find(id);
+            var roles = user.UserRoles.Select(ur => ur.Role).ToList();
+            return roles;
+        }
+
+        /// <summary>
+        /// GetUserAwards.
+        /// </summary>
+        /// <param name="id">id.</param>
+        /// <returns>awards.</returns>
+        public async Task<List<Award>> GetUserAwards(Guid? id)
+        {
+            var user = await this.Find(id);
+            var awards = user.UserAwards.Select(ur => ur.Award).ToList();
+            return awards;
         }
 
         /// <summary>
@@ -171,12 +201,12 @@ namespace ModelViewController.Services
         /// <param name="user">User.</param>
         /// <param name="awards">Awards.</param>
         /// <returns>task.</returns>
-        public async Task UpdateUserAwards(User user, List<Guid> awards)
+        public async Task UpdateUserAwards(User user, List<Award> awards)
         {
             user.UserAwards.Clear();
-            foreach (var awardId in awards)
+            foreach (var award in awards)
             {
-                user.UserAwards.Add(new UserAward { UserId = user.Id, AwardId = awardId });
+                user.UserAwards.Add(new UserAward { UserId = user.Id, AwardId = award.Id });
             }
 
             await this.Update(user);

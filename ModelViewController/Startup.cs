@@ -4,6 +4,7 @@
 
 namespace ModelViewController
 {
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -53,9 +54,16 @@ namespace ModelViewController
 
             string connection = @"Server=(localdb)\mssqllocaldb;Database=dbMVC;Trusted_Connection=True;";
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
-            services.AddScoped<IRepository<User>, UserRepository>();
-            services.AddScoped<IRepository<Award>, AwardRepository>();
+            services.AddScoped<IAwardRepository<Award>, AwardRepository>();
+            services.AddScoped<IUserRepository<User>, UserRepository>();
+            services.AddScoped<IRoleRepository<Role>, RoleRepository>();
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                            {
+                                options.LoginPath = new PathString("/Account/Login");
+                                options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddBreadcrumbs(this.GetType().Assembly, options =>
@@ -89,6 +97,8 @@ namespace ModelViewController
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

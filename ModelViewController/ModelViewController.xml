@@ -4,12 +4,69 @@
         <name>ModelViewController</name>
     </assembly>
     <members>
+        <member name="T:ModelViewController.Controllers.AccountController">
+            <summary>
+            AccountController.
+            </summary>
+        </member>
+        <member name="M:ModelViewController.Controllers.AccountController.#ctor(ModelViewController.DAL.ApplicationContext,ModelViewController.Services.Abstract.IAwardRepository{ModelViewController.DAL.Entities.User})">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.Controllers.AccountController"/> class.
+            </summary>
+            <param name="context">context.</param>
+            <param name="repository">repository.</param>
+        </member>
+        <member name="M:ModelViewController.Controllers.AccountController.Index">
+            <summary>
+            Index method.
+            </summary>
+            <returns>view.</returns>
+        </member>
+        <member name="M:ModelViewController.Controllers.AccountController.Register">
+            <summary>
+            Register method.
+            </summary>
+            <returns>View.</returns>
+        </member>
+        <member name="M:ModelViewController.Controllers.AccountController.Register(ModelViewController.Models.RegisterModel)">
+            <summary>
+            .
+            </summary>
+            <param name="model">model.</param>
+            <returns>View.</returns>
+        </member>
+        <member name="M:ModelViewController.Controllers.AccountController.Login">
+            <summary>
+            .
+            </summary>
+            <returns>View.</returns>
+        </member>
+        <member name="M:ModelViewController.Controllers.AccountController.Login(ModelViewController.Models.LoginModel)">
+            <summary>
+            .
+            </summary>
+            <param name="model">model.</param>
+            <returns>View.</returns>
+        </member>
+        <member name="M:ModelViewController.Controllers.AccountController.LogOff">
+            <summary>
+            LogOff.
+            </summary>
+            <returns>View.</returns>
+        </member>
+        <member name="M:ModelViewController.Controllers.AccountController.Authenticate(ModelViewController.DAL.Entities.User)">
+            <summary>
+            Authenticate.
+            </summary>
+            <param name="user">user.</param>
+            <returns>Task.</returns>
+        </member>
         <member name="T:ModelViewController.Controllers.AwardsController">
             <summary>
             Awards Controller.
             </summary>
         </member>
-        <member name="M:ModelViewController.Controllers.AwardsController.#ctor(ModelViewController.Services.Abstract.IRepository{ModelViewController.DAL.Entities.Award})">
+        <member name="M:ModelViewController.Controllers.AwardsController.#ctor(ModelViewController.Services.Abstract.IAwardRepository{ModelViewController.DAL.Entities.Award})">
             <summary>
             Initializes a new instance of the <see cref="T:ModelViewController.Controllers.AwardsController"/> class.
             </summary>
@@ -30,13 +87,13 @@
         </member>
         <member name="M:ModelViewController.Controllers.AwardsController.Create">
             <summary>
-            .
+            Create award method.
             </summary>
             <returns>Create View.</returns>
         </member>
         <member name="M:ModelViewController.Controllers.AwardsController.Create(ModelViewController.Models.AwardModel)">
             <summary>
-            Create.
+            Create award method.
             </summary>
             <param name="model">AwardModel.</param>
             <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the result of the asynchronous operation.</returns>
@@ -99,12 +156,13 @@
             Users Controller.
             </summary>
         </member>
-        <member name="M:ModelViewController.Controllers.UsersController.#ctor(ModelViewController.Services.Abstract.IRepository{ModelViewController.DAL.Entities.User},ModelViewController.Services.Abstract.IRepository{ModelViewController.DAL.Entities.Award})">
+        <member name="M:ModelViewController.Controllers.UsersController.#ctor(ModelViewController.Services.Abstract.IUserRepository{ModelViewController.DAL.Entities.User},ModelViewController.Services.Abstract.IAwardRepository{ModelViewController.DAL.Entities.Award},ModelViewController.Services.Abstract.IRoleRepository{ModelViewController.DAL.Entities.Role})">
             <summary>
             Initializes a new instance of the <see cref="T:ModelViewController.Controllers.UsersController"/> class.
             </summary>
-            <param name="repository">User repository.</param>
+            <param name="userRepository">User repository.</param>
             <param name="awardRepository">Award repository.</param>
+            <param name="roleRepository">Role repository.</param>
         </member>
         <member name="M:ModelViewController.Controllers.UsersController.Index">
             <summary>
@@ -132,6 +190,21 @@
             <param name="model">UserModel.</param>
             <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the result of the asynchronous operation.</returns>
         </member>
+        <member name="M:ModelViewController.Controllers.UsersController.AddAwards(System.Nullable{System.Guid})">
+            <summary>
+            .
+            </summary>
+            <param name="id">id.</param>
+            <returns>View.</returns>
+        </member>
+        <member name="M:ModelViewController.Controllers.UsersController.AddAwards(System.Guid,ModelViewController.Models.AddAwardModel)">
+            <summary>
+            .
+            </summary>
+            <param name="id">id.</param>
+            <param name="model">model.</param>
+            <returns>View.</returns>
+        </member>
         <member name="M:ModelViewController.Controllers.UsersController.Edit(System.Nullable{System.Guid})">
             <summary>
             .
@@ -146,6 +219,13 @@
             <param name="id">User Id.</param>
             <param name="model">Model.</param>
             <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the result of the asynchronous operation.</returns>
+        </member>
+        <member name="M:ModelViewController.Controllers.UsersController.ChangeRole(System.Nullable{System.Guid})">
+            <summary>
+            ChangeRole.
+            </summary>
+            <param name="id">id.</param>
+            <returns>View.</returns>
         </member>
         <member name="M:ModelViewController.Controllers.UsersController.Delete(System.Nullable{System.Guid})">
             <summary>
@@ -166,6 +246,56 @@
             .
             </summary>
             <returns>Physical File.</returns>
+        </member>
+        <member name="T:ModelViewController.Models.LoginModel">
+            <summary>
+            LoginModel class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.LoginModel.Login">
+            <summary>
+            Gets or sets Login.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.LoginModel.Password">
+            <summary>
+            Gets or sets Password.
+            </summary>
+        </member>
+        <member name="T:ModelViewController.Models.RegisterModel">
+            <summary>
+            RegisterModel class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.RegisterModel.Login">
+            <summary>
+            Gets or sets Login.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.RegisterModel.Password">
+            <summary>
+            Gets or sets Password.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.RegisterModel.ConfirmPassword">
+            <summary>
+            Gets or sets ConfirmPassword.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.RegisterModel.Name">
+            <summary>
+            Gets or sets Name.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.RegisterModel.Birthdate">
+            <summary>
+            Gets or sets Birthdate.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.RegisterModel.Photo">
+            <summary>
+            Gets or sets Photo.
+            </summary>
         </member>
         <member name="T:ModelViewController.Models.AwardModel">
             <summary>
@@ -207,6 +337,51 @@
             Gets a value indicating whether .
             </summary>
         </member>
+        <member name="T:ModelViewController.Models.AddAwardModel">
+            <summary>
+            AddAwardModel class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.AddAwardModel.UserId">
+            <summary>
+            Gets or sets UserId.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.AddAwardModel.UserAwards">
+            <summary>
+            Gets or sets userAwards.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.AddAwardModel.Awards">
+            <summary>
+            Gets or sets Awards.
+            </summary>
+        </member>
+        <member name="T:ModelViewController.Models.Users.ChangeUserRolesModel">
+            <summary>
+            ChangeUserRolesModel class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.ChangeUserRolesModel.UserId">
+            <summary>
+            Gets or sets UserId.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.ChangeUserRolesModel.UserName">
+            <summary>
+            Gets or sets UserName.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.ChangeUserRolesModel.UserRoles">
+            <summary>
+            Gets or sets UserRoles.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.ChangeUserRolesModel.Roles">
+            <summary>
+            Gets or sets UserRoles.
+            </summary>
+        </member>
         <member name="T:ModelViewController.Models.UserModel">
             <summary>
             UserViewModel.
@@ -235,6 +410,16 @@
         <member name="P:ModelViewController.Models.UserModel.PhotoSrc">
             <summary>
             Gets or sets PhotoSrc.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.UserModel.UserAwards">
+            <summary>
+            Gets or sets UserAwards.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.UserModel.Roles">
+            <summary>
+            Gets or sets Roles.
             </summary>
         </member>
         <member name="P:ModelViewController.Models.UserModel.Awards">

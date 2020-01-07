@@ -19,7 +19,7 @@ namespace ModelViewController.Services
     /// <summary>
     /// .
     /// </summary>
-    public class AwardRepository : IRepository<Award>
+    public class AwardRepository : IAwardRepository<Award>
     {
         private readonly ApplicationContext _context;
         private readonly IHostingEnvironment _appEnvironment;
@@ -143,16 +143,6 @@ namespace ModelViewController.Services
                 var fileInfo = new FileInfo(this._appEnvironment.WebRootPath + path);
                 fileInfo.Delete();
             }
-        }
-
-        /// <summary>
-        /// NotImplemented.
-        /// </summary>
-        /// <param name="item">Award.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns><param name="list">Guid list.</param>
-        public Task UpdateUserAwards(Award item, List<Guid> list)
-        {
-            throw new NotImplementedException();
         }
     }
 }

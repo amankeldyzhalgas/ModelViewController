@@ -8,6 +8,7 @@ namespace ModelViewController.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Microsoft.AspNetCore.Http;
+    using ModelViewController.DAL.Entities;
 
     /// <summary>
     /// UserViewModel.
@@ -45,8 +46,18 @@ namespace ModelViewController.Models
         public string PhotoSrc { get; set; }
 
         /// <summary>
+        /// Gets or sets UserAwards.
+        /// </summary>
+        public List<Award> UserAwards { get; set; }
+
+        /// <summary>
+        /// Gets or sets Roles.
+        /// </summary>
+        public List<Guid> Roles { get; set; }
+
+        /// <summary>
         /// Gets or sets Awards.
         /// </summary>
-        public List<Guid> Awards { get; set; }
+        public List<Award> Awards { get; set; }
     }
 }

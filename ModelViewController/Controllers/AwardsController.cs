@@ -7,6 +7,7 @@ namespace ModelViewController.Controllers
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -19,15 +20,16 @@ namespace ModelViewController.Controllers
     /// Awards Controller.
     /// </summary>
     [Breadcrumb("Awards")]
+    [Authorize(Roles = "admin")]
     public class AwardsController : Controller
     {
-        private readonly IRepository<Award> _repository;
+        private readonly IAwardRepository<Award> _repository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AwardsController"/> class.
         /// </summary>
         /// <param name="repository">Repository.</param>
-        public AwardsController(IRepository<Award> repository)
+        public AwardsController(IAwardRepository<Award> repository)
         {
             this._repository = repository;
         }
@@ -38,6 +40,7 @@ namespace ModelViewController.Controllers
         /// Index.
         /// </summary>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [Route("/awards")]
         public async Task<IActionResult> Index()
         {
             return this.View(await this._repository.GetAllAsync());
@@ -51,6 +54,7 @@ namespace ModelViewController.Controllers
         /// <param name="id">Award Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [Breadcrumb("Details")]
+        [Route("award/{id}")]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -67,13 +71,13 @@ namespace ModelViewController.Controllers
             return this.View(award);
         }
 
-        // GET: Awards/Create
-
         /// <summary>
-        /// .
+        /// Create award method.
         /// </summary>
         /// <returns>Create View.</returns>
+        // GET: Awards/Create
         [Breadcrumb("Create")]
+        [Route("/create-award")]
         public IActionResult Create()
         {
             return this.View();
@@ -84,7 +88,7 @@ namespace ModelViewController.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 
         /// <summary>
-        /// Create.
+        /// Create award method.
         /// </summary>
         /// <param name="model">AwardModel.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
@@ -115,6 +119,7 @@ namespace ModelViewController.Controllers
         /// <param name="id">Award Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [Breadcrumb("Edit")]
+        [Route("/award/{id}/edit")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -187,6 +192,7 @@ namespace ModelViewController.Controllers
         /// <param name="id">Award Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [Breadcrumb("Delete")]
+        [Route("/award/{id}/delete")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)

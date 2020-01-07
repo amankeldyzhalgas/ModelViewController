@@ -8,31 +8,38 @@ namespace ModelViewController.Controllers
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using ModelViewController.DAL.Entities;
     using ModelViewController.Models;
+    using ModelViewController.Models.Users;
+    using ModelViewController.Services;
     using ModelViewController.Services.Abstract;
     using SmartBreadcrumbs.Attributes;
 
     /// <summary>
     /// Users Controller.
     /// </summary>
+    [Authorize]
     [Breadcrumb("Users")]
     public class UsersController : Controller
     {
-        private readonly IRepository<User> _repository;
-        private readonly IRepository<Award> _awardRepository;
+        private readonly IUserRepository<User> _userRepository;
+        private readonly IAwardRepository<Award> _awardRepository;
+        private readonly IRoleRepository<Role> _roleRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UsersController"/> class.
         /// </summary>
-        /// <param name="repository">User repository.</param>
+        /// <param name="userRepository">User repository.</param>
         /// <param name="awardRepository">Award repository.</param>
-        public UsersController(IRepository<User> repository, IRepository<Award> awardRepository)
+        /// <param name="roleRepository">Role repository.</param>
+        public UsersController(IUserRepository<User> userRepository, IAwardRepository<Award> awardRepository, IRoleRepository<Role> roleRepository)
         {
-            this._repository = repository;
+            this._userRepository = userRepository;
             this._awardRepository = awardRepository;
+            this._roleRepository = roleRepository;
         }
 
         // GET: Users
@@ -41,30 +48,21 @@ namespace ModelViewController.Controllers
         /// .
         /// </summary>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [AllowAnonymous]
+        [Route("/users")]
         public async Task<IActionResult> Index()
         {
-            return this.View(await this._repository.GetAllAsync());
+            return this.View(await this._userRepository.GetAllAsync());
         }
-
-        /*
-        /// <summary>
-        /// .
-        /// </summary>
-        /// <param name="name">name.</param>
-        /// <returns>users.</returns>
-        public async Task<IActionResult> Filter(string name)
-        {
-            return this.View(await this._repository.Filter(name));
-        }*/
-
-        // GET: Users/Details/5
 
         /// <summary>
         /// .
         /// </summary>
         /// <param name="id">User Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        // GET: Users/Details/5
         [Breadcrumb("Details")]
+        [Route("user/{id}")]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -72,7 +70,7 @@ namespace ModelViewController.Controllers
                 return this.NotFound();
             }
 
-            var user = await this._repository.Find(id);
+            var user = await this._userRepository.Find(id);
             if (user == null)
             {
                 return this.NotFound();
@@ -88,6 +86,8 @@ namespace ModelViewController.Controllers
         /// </summary>
         /// <returns>Create View.</returns>
         [Breadcrumb("Create")]
+        [Authorize(Roles = "admin")]
+        [Route("/create-user")]
         public IActionResult Create()
         {
             this.ViewData["Awards"] = this._awardRepository.GetAll();
@@ -106,6 +106,7 @@ namespace ModelViewController.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Breadcrumb("Create")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(UserModel model)
         {
             if (this.ModelState.IsValid)
@@ -119,16 +120,16 @@ namespace ModelViewController.Controllers
                 }
 
                 var user = new User { Name = model.Name, Birthdate = model.Birthdate };
-                user = await this._repository.Add(user);
+                user = await this._userRepository.Add(user);
 
                 if (model.Awards != null)
                 {
-                    await this._repository.UpdateUserAwards(user, model.Awards);
+                    await this._userRepository.UpdateUserAwards(user, model.Awards);
                 }
 
                 if (model.Photo != null)
                 {
-                    await this._repository.AddFile(user, model.Photo);
+                    await this._userRepository.AddFile(user, model.Photo);
                 }
 
                 return this.RedirectToAction(nameof(this.Index));
@@ -138,14 +139,85 @@ namespace ModelViewController.Controllers
             return this.View(model);
         }
 
-        // GET: Users/Edit/5
+        /// <summary>
+        /// .
+        /// </summary>
+        /// <param name="id">id.</param>
+        /// <returns>View.</returns>
+        [Breadcrumb("AddAwards")]
+        public async Task<IActionResult> AddAwards(Guid? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var user = await this._userRepository.Find(id);
+            var userAwards = await this._userRepository.GetUserAwards(id);
+            var awards = await this._awardRepository.GetAllAsync();
+            var model = new AddAwardModel { UserId = user.Id, Awards = awards, UserAwards = userAwards };
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(model);
+        }
+
+        /// <summary>
+        /// .
+        /// </summary>
+        /// <param name="id">id.</param>
+        /// <param name="model">model.</param>
+        /// <returns>View.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Breadcrumb("AddAwards")]
+        public async Task<IActionResult> AddAwards(Guid id, AddAwardModel model)
+        {
+            if (id != model.UserId)
+            {
+                return this.NotFound();
+            }
+
+            if (this.ModelState.IsValid)
+            {
+                try
+                {
+                    var user = await this._userRepository.Find(id);
+                    if (model.Awards != null)
+                    {
+                        await this._userRepository.UpdateUserAwards(user, model.Awards);
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!this.UserExists(model.UserId))
+                    {
+                        return this.NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            this.ViewData["Awards"] = this._awardRepository.GetAll();
+            return this.View(model);
+        }
 
         /// <summary>
         /// .
         /// </summary>
         /// <param name="id">User Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        // GET: Users/Edit/5
         [Breadcrumb("Edit")]
+        [Authorize(Roles = "admin")]
+        [Route("/user/{id}/edit")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -153,14 +225,15 @@ namespace ModelViewController.Controllers
                 return this.NotFound();
             }
 
-            var user = await this._repository.Find(id);
-            var model = new UserModel { Id = user.Id, Name = user.Name, Birthdate = user.Birthdate, PhotoSrc = user.Photo, Awards = user.UserAwards.Select(ua => ua.AwardId).ToList() };
+            var user = await this._userRepository.Find(id);
+            var userAwards = await this._userRepository.GetUserAwards(id);
+            var awards = await this._awardRepository.GetAllAsync();
+            var model = new UserModel { Id = user.Id, Name = user.Name, Birthdate = user.Birthdate, PhotoSrc = user.Photo, UserAwards = userAwards, Awards = awards };
             if (user == null)
             {
                 return this.NotFound();
             }
 
-            this.ViewData["Awards"] = this._awardRepository.GetAll();
             return this.View(model);
         }
 
@@ -177,6 +250,7 @@ namespace ModelViewController.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Breadcrumb("Edit")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(Guid id, UserModel model)
         {
             if (id != model.Id)
@@ -188,17 +262,17 @@ namespace ModelViewController.Controllers
             {
                 try
                 {
-                    var user = await this._repository.Find(id);
+                    var user = await this._userRepository.Find(id);
                     user.Name = model.Name;
                     user.Birthdate = model.Birthdate;
                     if (model.Awards != null)
                     {
-                        await this._repository.UpdateUserAwards(user, model.Awards);
+                        await this._userRepository.UpdateUserAwards(user, model.Awards);
                     }
 
                     if (model.Photo != null)
                     {
-                        await this._repository.AddFile(user, model.Photo);
+                        await this._userRepository.AddFile(user, model.Photo);
                     }
                 }
                 catch (DbUpdateConcurrencyException)
@@ -220,6 +294,32 @@ namespace ModelViewController.Controllers
             return this.View(model);
         }
 
+        /// <summary>
+        /// ChangeRole.
+        /// </summary>
+        /// <param name="id">id.</param>
+        /// <returns>View.</returns>
+        [Breadcrumb("ChangeRole")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> ChangeRole(Guid? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var user = await this._userRepository.Find(id);
+            var userRoles = await this._userRepository.GetUserRoles(id);
+            var roles = await this._roleRepository.GetAllAsync();
+            var model = new ChangeUserRolesModel { UserId = user.Id, UserName = user.UserName,  UserRoles = userRoles, Roles = roles };
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(model);
+        }
+
         // GET: Users/Delete/5
 
         /// <summary>
@@ -228,6 +328,8 @@ namespace ModelViewController.Controllers
         /// <param name="id">User Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [Breadcrumb("Delete")]
+        [Authorize(Roles = "admin")]
+        [Route("/user/{id}/delete")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -235,7 +337,7 @@ namespace ModelViewController.Controllers
                 return this.NotFound();
             }
 
-            var user = await this._repository.Find(id);
+            var user = await this._userRepository.Find(id);
             if (user == null)
             {
                 return this.NotFound();
@@ -253,10 +355,11 @@ namespace ModelViewController.Controllers
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost]
         [ActionName("Delete")]
+        [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await this._repository.Remove(id);
+            await this._userRepository.Remove(id);
             return this.RedirectToAction(nameof(this.Index));
         }
 
@@ -271,7 +374,7 @@ namespace ModelViewController.Controllers
                            "wwwroot", "users.txt");
             using (var stream = new FileStream(path, FileMode.OpenOrCreate))
             {
-                foreach (var item in this._repository.GetAll())
+                foreach (var item in this._userRepository.GetAll())
                 {
                     var str = $"Name: {item.Name} Birthdate: {item.Birthdate} Photo: {item.Photo}{Environment.NewLine}Awards{Environment.NewLine}";
                     if (item.UserAwards != null)
@@ -298,7 +401,7 @@ namespace ModelViewController.Controllers
 
         private bool UserExists(Guid id)
         {
-            return this._repository.GetAll().Any(e => e.Id == id);
+            return this._userRepository.GetAll().Any(e => e.Id == id);
         }
     }
 }

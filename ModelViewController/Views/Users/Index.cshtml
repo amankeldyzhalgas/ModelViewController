@@ -5,12 +5,15 @@
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 
-<p>
-    <a class="btn btn-success btn-sm" asp-action="Create">
-        <i class="fa fa-plus"></i>
-        Create
-    </a>
-</p>
+@if (User.IsInRole("admin"))
+{
+    <p>
+        <a class="btn btn-success btn-sm" asp-action="Create">
+            <i class="fa fa-plus"></i>
+            Create
+        </a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -25,28 +28,33 @@
             <th>
                 @Html.DisplayName("Age")
             </th>
-            <th>
-                @Html.DisplayName("Awards")
-            </th>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <th>
+                    @Html.DisplayName("Awards")
+                </th>
+            }
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    <img style='width:80px; height:auto;' src="@item.Photo" class="rounded-circle" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Birthdate)
-                </td>
-                <td>
-                    @(DateTime.Now.Year - item.Birthdate.Year)
-                </td>
+        <tr>
+            <td>
+                <img style='width:80px; height:auto;' src="@item.Photo" class="rounded-circle" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Birthdate)
+            </td>
+            <td>
+                @(DateTime.Now.Year - item.Birthdate.Year)
+            </td>
+            @if (User.Identity.IsAuthenticated)
+            {
                 <td>
                     <div class="row">
                         @foreach (var award in item.UserAwards)
@@ -61,12 +69,18 @@
                         }
                     </div>
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary"><i class='fas fa-pencil-alt'></i></a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="fa fa-info"></i></a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                </td>
-            </tr>
+                @if (User.IsInRole("admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary" title="edit"><i class='fas fa-pencil-alt'></i></a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="details"><i class="fa fa-info"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="delete"><i class="fa fa-trash"></i></a>
+                        <a asp-action="AddAwards" asp-route-id="@item.Id" class="btn btn-sm btn-success" title="add awards"><i class="fa fa-award"></i></a>
+                        <a asp-action="ChangeRole" asp-route-id="@item.Id" class="btn btn-sm btn-secondary" title="change role"><i class="fa fa-users"></i></a>
+                    </td>
+                 }
+            }
+        </tr>
         }
     </tbody>
 </table>

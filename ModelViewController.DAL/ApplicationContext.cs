@@ -4,6 +4,8 @@
 
 namespace ModelViewController.DAL
 {
+    using System;
+    using System.Collections.Generic;
     using Microsoft.EntityFrameworkCore;
     using ModelViewController.DAL.Entities;
 
@@ -23,14 +25,19 @@ namespace ModelViewController.DAL
         }
 
         /// <summary>
-        /// Gets or sets .
+        /// Gets or sets Users.
         /// </summary>
         public DbSet<User> Users { get; set; }
 
         /// <summary>
-        /// Gets or sets .
+        /// Gets or sets Awards.
         /// </summary>
         public DbSet<Award> Awards { get; set; }
+
+        /// <summary>
+        /// Gets or sets Roles.
+        /// </summary>
+        public DbSet<Role> Roles { get; set; }
 
         /// <summary>
         /// OnModelCreating method.
@@ -38,6 +45,7 @@ namespace ModelViewController.DAL
         /// <param name="modelBuilder">ModelBuilder.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region UserAwards
             modelBuilder.Entity<UserAward>()
                 .HasKey(t => new { t.UserId, t.AwardId });
 
@@ -50,6 +58,46 @@ namespace ModelViewController.DAL
                 .HasOne(ua => ua.Award)
                 .WithMany(a => a.UserAwards)
                 .HasForeignKey(ua => ua.AwardId);
+            #endregion
+            #region UserRoles
+            modelBuilder.Entity<UserRole>()
+                .HasKey(t => new { t.UserId, t.RoleId });
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId);
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId);
+            #endregion
+
+            modelBuilder.Entity<User>(user => {
+                user.HasIndex(u => u.UserName).IsUnique();
+            });
+
+            var roleId = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+            var roles = new[]
+            {
+                new Role { Id = roleId, Name = "admin", DisplayName = "Администратор" },
+                new Role { Id = Guid.NewGuid(), Name = "user", DisplayName = "Пользователь" },
+            };
+
+            var users = new[]
+            {
+                new User { Id = userId, UserName = "admin", Password = "admin", Name = "admin", Birthdate = DateTime.Parse("12.12.2012") },
+            };
+
+            var userRoles = new[]
+            {
+                new UserRole { UserId = userId, RoleId = roleId },
+            };
+            modelBuilder.Entity<User>().HasData(users[0]);
+            modelBuilder.Entity<Role>().HasData(roles);
+            modelBuilder.Entity<UserRole>().HasData(userRoles[0]);
         }
     }
 }

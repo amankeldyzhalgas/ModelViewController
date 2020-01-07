@@ -6,7 +6,6 @@ namespace ModelViewController.DAL.Entities
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
 
     /// <summary>
     /// Role class.
@@ -14,13 +13,31 @@ namespace ModelViewController.DAL.Entities
     public class Role
     {
         /// <summary>
-        /// Gets or sets .
+        /// Gets or sets Id.
         /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or sets .
+        /// Gets or sets Name.
         /// </summary>
-        public string RoleName { get; set; }
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets DisplayName.
+        /// </summary>
+        public string DisplayName { get; set; }
+
+        /// <summary>
+        /// Gets or sets UserRoles.
+        /// </summary>
+        public virtual List<UserRole> UserRoles { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Role"/> class.
+        /// Constructor.
+        /// </summary>
+        public Role()
+        {
+        }
     }
 }

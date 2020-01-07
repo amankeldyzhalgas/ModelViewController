@@ -77,12 +77,56 @@
             </summary>
             <param name="path">path.</param>
         </member>
-        <member name="M:ModelViewController.Services.AwardRepository.UpdateUserAwards(ModelViewController.DAL.Entities.Award,System.Collections.Generic.List{System.Guid})">
+        <member name="T:ModelViewController.Services.RoleRepository">
             <summary>
-            NotImplemented.
+            RoleRepository class.
             </summary>
-            <param name="item">Award.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns><param name="list">Guid list.</param>
+        </member>
+        <member name="M:ModelViewController.Services.RoleRepository.#ctor(ModelViewController.DAL.ApplicationContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.Services.RoleRepository"/> class.
+            </summary>
+            <param name="context">context.</param>
+        </member>
+        <member name="M:ModelViewController.Services.RoleRepository.Add(ModelViewController.DAL.Entities.Role)">
+            <summary>
+            Add method.
+            </summary>
+            <param name="role">item.</param>
+            <returns>added item.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.RoleRepository.Find(System.Nullable{System.Guid})">
+            <summary>
+            Find method.
+            </summary>
+            <param name="id">id.</param>
+            <returns>item.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.RoleRepository.GetAll">
+            <summary>
+            GetAll method.
+            </summary>
+            <returns>roles.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.RoleRepository.GetAllAsync">
+            <summary>
+            GetAllAsync method.
+            </summary>
+            <returns>roles.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.RoleRepository.Remove(System.Guid)">
+            <summary>
+            Remove method.
+            </summary>
+            <param name="id">id.</param>
+            <returns>task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.RoleRepository.Update(ModelViewController.DAL.Entities.Role)">
+            <summary>
+            Update method.
+            </summary>
+            <param name="role">item.</param>
+            <returns>task.</returns>
         </member>
         <member name="T:ModelViewController.Services.UserRepository">
             <summary>
@@ -114,13 +158,27 @@
             <summary>
             GetAll method.
             </summary>
-            <returns>user.</returns>
+            <returns>users.</returns>
         </member>
         <member name="M:ModelViewController.Services.UserRepository.GetAllAsync">
             <summary>
             GetAllAsync method.
             </summary>
-            <returns>user.</returns>
+            <returns>users.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.GetUserRoles(System.Nullable{System.Guid})">
+            <summary>
+            GetUserRoles.
+            </summary>
+            <param name="id">id.</param>
+            <returns>roles.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.UserRepository.GetUserAwards(System.Nullable{System.Guid})">
+            <summary>
+            GetUserAwards.
+            </summary>
+            <param name="id">id.</param>
+            <returns>awards.</returns>
         </member>
         <member name="M:ModelViewController.Services.UserRepository.Filter(System.String)">
             <summary>
@@ -165,7 +223,7 @@
             </summary>
             <param name="path">path.</param>
         </member>
-        <member name="M:ModelViewController.Services.UserRepository.UpdateUserAwards(ModelViewController.DAL.Entities.User,System.Collections.Generic.List{System.Guid})">
+        <member name="M:ModelViewController.Services.UserRepository.UpdateUserAwards(ModelViewController.DAL.Entities.User,System.Collections.Generic.List{ModelViewController.DAL.Entities.Award})">
             <summary>
             UpdateUserAwards method.
             </summary>

@@ -39,7 +39,7 @@ namespace ModelViewController.DAL.Entities
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Award"/> class.
-        /// .
+        /// Constructor.
         /// </summary>
         public Award()
         {
