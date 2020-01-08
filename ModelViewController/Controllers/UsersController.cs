@@ -5,6 +5,7 @@
 namespace ModelViewController.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace ModelViewController.Controllers
         // GET: Users
 
         /// <summary>
-        /// .
+        /// Index method.
         /// </summary>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [AllowAnonymous]
@@ -56,6 +57,17 @@ namespace ModelViewController.Controllers
         }
 
         /// <summary>
+        /// Index method with param.
+        /// </summary>
+        /// <param name="name">name.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        [Route("/users/{name}")]
+        public async Task<IActionResult> Index(string name)
+        {
+            return this.View(await this._userRepository.Filter(name));
+        }
+
+        /// <summary>
         /// .
         /// </summary>
         /// <param name="id">User Id.</param>
@@ -63,20 +75,27 @@ namespace ModelViewController.Controllers
         // GET: Users/Details/5
         [Breadcrumb("Details")]
         [Route("user/{id}")]
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return this.NotFound();
             }
 
-            var user = await this._userRepository.Find(id);
-            if (user == null)
+            if (Guid.TryParse(id, out Guid guid))
             {
-                return this.NotFound();
+                var user = await this._userRepository.Find(guid);
+                return this.View(user);
             }
 
-            return this.View(user);
+            var users = await this._userRepository.Filter(id);
+            if (users != null)
+            {
+                var user = users.First();
+                return this.View(user);
+            }
+
+            return this.NotFound();
         }
 
         // GET: Users/Create
@@ -107,6 +126,7 @@ namespace ModelViewController.Controllers
         [ValidateAntiForgeryToken]
         [Breadcrumb("Create")]
         [Authorize(Roles = "admin")]
+        [Route("/create-user")]
         public async Task<IActionResult> Create(UserModel model)
         {
             if (this.ModelState.IsValid)
@@ -210,6 +230,43 @@ namespace ModelViewController.Controllers
         }
 
         /// <summary>
+        /// AddAwards.
+        /// </summary>
+        /// <param name="id">id.</param>
+        /// <param name="awardId">awardId.</param>
+        /// <returns>awards.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("/award-user/{user}_{award}")]
+        public async Task<IActionResult> AddAwards(Guid id, Guid awardId)
+        {
+            try
+            {
+                var user = await this._userRepository.Find(id);
+                var award = await this._awardRepository.Find(awardId);
+                if (award != null)
+                {
+                    var awards = new List<Award>();
+                    awards.Add(award);
+                    await this._userRepository.UpdateUserAwards(user, awards);
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!this.UserExists(id))
+                {
+                    return this.NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
+        /// <summary>
         /// .
         /// </summary>
         /// <param name="id">User Id.</param>
@@ -251,6 +308,7 @@ namespace ModelViewController.Controllers
         [ValidateAntiForgeryToken]
         [Breadcrumb("Edit")]
         [Authorize(Roles = "admin")]
+        [Route("/user/{id}/edit")]
         public async Task<IActionResult> Edit(Guid id, UserModel model)
         {
             if (id != model.Id)
@@ -274,6 +332,8 @@ namespace ModelViewController.Controllers
                     {
                         await this._userRepository.AddFile(user, model.Photo);
                     }
+
+                    await this._userRepository.Update(user);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -43,6 +43,13 @@
             </summary>
             <returns>list item.</returns>
         </member>
+        <member name="M:ModelViewController.Services.Abstract.IAwardRepository`1.Filter(System.String)">
+            <summary>
+            Filter method.
+            </summary>
+            <param name="param">param.</param>
+            <returns>list item.</returns>
+        </member>
         <member name="M:ModelViewController.Services.Abstract.IAwardRepository`1.Find(System.Nullable{System.Guid})">
             <summary>
             Find method.

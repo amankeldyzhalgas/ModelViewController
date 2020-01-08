@@ -83,6 +83,29 @@ namespace ModelViewController.Services
         }
 
         /// <summary>
+        /// Filter method.
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <returns>users.</returns>
+        public async Task<List<User>> Filter(string name)
+        {
+            var users = await this.GetAllAsync();
+            if (name.Length == 1)
+            {
+                return users.Where(u => u.Name.StartsWith(name)).ToList();
+            }
+            else if (name.Contains("_"))
+            {
+                name = name.Replace("_", " ");
+                return users.Where(u => u.Name.Equals(name)).OrderBy(u => u.Birthdate).Take(1).ToList();
+            }
+            else
+            {
+                return users.Where(u => u.Name.Contains(name)).ToList();
+            }
+        }
+
+        /// <summary>
         /// GetUserRoles.
         /// </summary>
         /// <param name="id">id.</param>
@@ -111,14 +134,14 @@ namespace ModelViewController.Services
         /// </summary>
         /// <param name="param">param.</param>
         /// <returns>user.</returns>
-        public async Task<List<User>> Filter(string param)
+        /*public async Task<List<User>> Filter(string param)
         {
             return await this._context.Users
                 .Include(u => u.UserAwards)
                 .ThenInclude(ua => ua.Award)
                 .Where(u => u.Name.StartsWith(param))
                 .ToListAsync();
-        }
+        }*/
 
         /// <summary>
         /// Remove method.

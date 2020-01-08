@@ -14,12 +14,12 @@ namespace ModelViewController.Models
     public class AwardModel
     {
         /// <summary>
-        /// Gets or sets id.
+        /// Gets or sets Id.
         /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or sets title.
+        /// Gets or sets Title.
         /// </summary>
         [Required]
         [StringLength(50, ErrorMessage = "The maximum length must be at least 50 characters")]

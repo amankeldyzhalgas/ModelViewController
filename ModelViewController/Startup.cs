@@ -117,7 +117,12 @@ namespace ModelViewController
                 routes.MapRoute(
                     name: "user-filter",
                     template: "users/{name}",
-                    defaults: new { controller = "Users", action = "Filter" });*/
+                    defaults: new { controller = "Users", action = "Filter" });
+
+                    routes.MapRoute(
+                         name: "award-user",
+                         template: "{controller=Home}/{action=Index}/{userid?}_{awardid?}",
+                         defaults: new { controller = "Users", action = "AddAwards" });*/
             });
         }
     }

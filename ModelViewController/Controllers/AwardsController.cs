@@ -46,6 +46,17 @@ namespace ModelViewController.Controllers
             return this.View(await this._repository.GetAllAsync());
         }
 
+        /// <summary>
+        /// Index.
+        /// </summary>
+        /// <param name="name">name.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [Route("/awards/{name}")]
+        public async Task<IActionResult> Index(string name)
+        {
+            return this.View(await this._repository.Filter(name));
+        }
+
         // GET: Awards/Details/5
 
         /// <summary>
@@ -55,20 +66,28 @@ namespace ModelViewController.Controllers
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [Breadcrumb("Details")]
         [Route("award/{id}")]
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return this.NotFound();
             }
 
-            var award = await this._repository.Find(id);
-            if (award == null)
+
+            if (Guid.TryParse(id, out Guid guid))
             {
-                return this.NotFound();
+                var award = await this._repository.Find(guid);
+                return this.View(award);
             }
 
-            return this.View(award);
+            var awards = await this._repository.Filter(id);
+            if (awards != null)
+            {
+                var award = awards.First();
+                return this.View(award);
+            }
+
+            return this.NotFound();
         }
 
         /// <summary>
@@ -94,6 +113,7 @@ namespace ModelViewController.Controllers
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("/create-award")]
         public async Task<IActionResult> Create(AwardModel model)
         {
             if (this.ModelState.IsValid)
@@ -149,6 +169,7 @@ namespace ModelViewController.Controllers
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("/award/{id}/edit")]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,Title,Description")] Award award, IFormFile image)
         {
             if (id != award.Id)
@@ -219,6 +240,7 @@ namespace ModelViewController.Controllers
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("/award/{id}/delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             await this._repository.Remove(id);

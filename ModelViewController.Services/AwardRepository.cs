@@ -76,14 +76,28 @@ namespace ModelViewController.Services
             return await this._context.Awards.ToListAsync();
         }
 
+
         /// <summary>
-        /// GetAllAsync method.
+        /// Filter method.
         /// </summary>
-        /// <param name="param">param.</param>
-        /// <returns>awards.</returns>
-        public async Task<List<Award>> Filter(string param)
+        /// <param name="name">Name.</param>
+        /// <returns>users.</returns>
+        public async Task<List<Award>> Filter(string name)
         {
-            return await this._context.Awards.Where(a => a.Title.StartsWith(param)).ToListAsync();
+            var awards = await this.GetAllAsync();
+            if (name.Length == 1)
+            {
+                return awards.Where(u => u.Title.StartsWith(name)).ToList();
+            }
+            else if (name.Contains("_"))
+            {
+                name = name.Replace("_", " ");
+                return awards.Where(u => u.Title.Equals(name)).Take(1).ToList();
+            }
+            else
+            {
+                return awards.Where(u => u.Title.Contains(name)).ToList();
+            }
         }
 
         /// <summary>

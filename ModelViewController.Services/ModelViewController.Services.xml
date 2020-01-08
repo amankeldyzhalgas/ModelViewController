@@ -44,10 +44,10 @@
         </member>
         <member name="M:ModelViewController.Services.AwardRepository.Filter(System.String)">
             <summary>
-            GetAllAsync method.
+            Filter method.
             </summary>
-            <param name="param">param.</param>
-            <returns>awards.</returns>
+            <param name="name">Name.</param>
+            <returns>users.</returns>
         </member>
         <member name="M:ModelViewController.Services.AwardRepository.Remove(System.Guid)">
             <summary>
@@ -166,6 +166,13 @@
             </summary>
             <returns>users.</returns>
         </member>
+        <member name="M:ModelViewController.Services.UserRepository.Filter(System.String)">
+            <summary>
+            Filter method.
+            </summary>
+            <param name="name">Name.</param>
+            <returns>users.</returns>
+        </member>
         <member name="M:ModelViewController.Services.UserRepository.GetUserRoles(System.Nullable{System.Guid})">
             <summary>
             GetUserRoles.
@@ -179,13 +186,6 @@
             </summary>
             <param name="id">id.</param>
             <returns>awards.</returns>
-        </member>
-        <member name="M:ModelViewController.Services.UserRepository.Filter(System.String)">
-            <summary>
-            GetAllAsync method.
-            </summary>
-            <param name="param">param.</param>
-            <returns>user.</returns>
         </member>
         <member name="M:ModelViewController.Services.UserRepository.Remove(System.Guid)">
             <summary>

@@ -49,6 +49,13 @@ namespace ModelViewController.Services.Abstract
         Task<List<T>> GetAllAsync();
 
         /// <summary>
+        /// Filter method.
+        /// </summary>
+        /// <param name="param">param.</param>
+        /// <returns>list item.</returns>
+        Task<List<T>> Filter(string param);
+
+        /// <summary>
         /// Find method.
         /// </summary>
         /// <param name="id">id.</param>

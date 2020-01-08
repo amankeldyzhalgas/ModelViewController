@@ -25,14 +25,14 @@ namespace ModelViewController.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationContext _context;
-        private readonly IAwardRepository<User> _repository;
+        private readonly IUserRepository<User> _repository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountController"/> class.
         /// </summary>
         /// <param name="context">context.</param>
         /// <param name="repository">repository.</param>
-        public AccountController(ApplicationContext context, IAwardRepository<User> repository)
+        public AccountController(ApplicationContext context, IUserRepository<User> repository)
         {
             this._context = context;
             this._repository = repository;
