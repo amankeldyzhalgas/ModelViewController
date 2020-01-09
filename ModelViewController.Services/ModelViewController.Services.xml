@@ -4,6 +4,79 @@
         <name>ModelViewController.Services</name>
     </assembly>
     <members>
+        <member name="T:ModelViewController.Services.Extensions.FileLoggerExtensions">
+            <summary>
+            FileLoggerExtensions static class.
+            </summary>
+        </member>
+        <member name="M:ModelViewController.Services.Extensions.FileLoggerExtensions.AddFile(Microsoft.Extensions.Logging.ILoggerFactory,System.String)">
+            <summary>
+            AddFile mehod.
+            </summary>
+            <param name="factory">factory.</param>
+            <param name="filePath">filePath.</param>
+            <returns>ILoggerFactory.</returns>
+        </member>
+        <member name="T:ModelViewController.Services.FileLogger">
+            <summary>
+            FileLogger class.
+            </summary>
+        </member>
+        <member name="M:ModelViewController.Services.FileLogger.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.Services.FileLogger"/> class.
+            </summary>
+            <param name="path">path/</param>
+        </member>
+        <member name="M:ModelViewController.Services.FileLogger.BeginScope``1(``0)">
+            <summary>
+            BeginScope method.
+            </summary>
+            <typeparam name="TState">TState.</typeparam>
+            <param name="state">state.</param>
+            <returns>IDisposable.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.FileLogger.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            IsEnabled method.
+            </summary>
+            <param name="logLevel">logLevel.</param>
+            <returns>bool.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.FileLogger.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
+            <summary>
+            Log method.
+            </summary>
+            <typeparam name="TState">TState.</typeparam>
+            <param name="logLevel">logLevel.</param>
+            <param name="eventId">eventId.</param>
+            <param name="state">state.</param>
+            <param name="exception">exception.</param>
+            <param name="formatter">formatter.</param>
+        </member>
+        <member name="T:ModelViewController.Services.Providers.FileLoggerProvider">
+            <summary>
+            FileLoggerProvider class.
+            </summary>
+        </member>
+        <member name="M:ModelViewController.Services.Providers.FileLoggerProvider.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.Services.Providers.FileLoggerProvider"/> class.
+            </summary>
+            <param name="_path">path.</param>
+        </member>
+        <member name="M:ModelViewController.Services.Providers.FileLoggerProvider.CreateLogger(System.String)">
+            <summary>
+            CreateLogger method.
+            </summary>
+            <param name="categoryName">categoryName.</param>
+            <returns>ILogger.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Providers.FileLoggerProvider.Dispose">
+            <summary>
+            Dispose method.
+            </summary>
+        </member>
         <member name="T:ModelViewController.Services.AwardRepository">
             <summary>
             .

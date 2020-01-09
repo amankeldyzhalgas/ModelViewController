@@ -227,9 +227,12 @@ namespace ModelViewController.Services
         public async Task UpdateUserAwards(User user, List<Award> awards)
         {
             user.UserAwards.Clear();
-            foreach (var award in awards)
+            if (awards != null)
             {
-                user.UserAwards.Add(new UserAward { UserId = user.Id, AwardId = award.Id });
+                foreach (var award in awards)
+                {
+                    user.UserAwards.Add(new UserAward { UserId = user.Id, AwardId = award.Id });
+                }
             }
 
             await this.Update(user);

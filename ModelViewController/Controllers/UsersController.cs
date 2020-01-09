@@ -229,16 +229,19 @@ namespace ModelViewController.Controllers
             return this.View(model);
         }
 
+        /*
+            award-user/10_25 - Награждение пользователя с идентификатором 10
+            наградой с идентификатором 25
+        */
+
         /// <summary>
-        /// AddAwards.
+        /// AddAward.
         /// </summary>
         /// <param name="id">id.</param>
         /// <param name="awardId">awardId.</param>
         /// <returns>awards.</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("/award-user/{user}_{award}")]
-        public async Task<IActionResult> AddAwards(Guid id, Guid awardId)
+        [Route("/award-user/{id:Guid}/{awardId:Guid}")]
+        public async Task<IActionResult> AddAward(Guid id, Guid awardId)
         {
             try
             {
@@ -323,10 +326,7 @@ namespace ModelViewController.Controllers
                     var user = await this._userRepository.Find(id);
                     user.Name = model.Name;
                     user.Birthdate = model.Birthdate;
-                    if (model.Awards != null)
-                    {
-                        await this._userRepository.UpdateUserAwards(user, model.Awards);
-                    }
+                    await this._userRepository.UpdateUserAwards(user, model.Awards);
 
                     if (model.Photo != null)
                     {

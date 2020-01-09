@@ -219,9 +219,9 @@
             <param name="model">model.</param>
             <returns>View.</returns>
         </member>
-        <member name="M:ModelViewController.Controllers.UsersController.AddAwards(System.Guid,System.Guid)">
+        <member name="M:ModelViewController.Controllers.UsersController.AddAward(System.Guid,System.Guid)">
             <summary>
-            AddAwards.
+            AddAward.
             </summary>
             <param name="id">id.</param>
             <param name="awardId">awardId.</param>
@@ -489,12 +489,13 @@
             </summary>
             <param name="services">services.</param>
         </member>
-        <member name="M:ModelViewController.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+        <member name="M:ModelViewController.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory)">
             <summary>
             Configure.
             </summary>
             <param name="app">IApplicationBuilder.</param>
             <param name="env">IHostingEnvironment.</param>
+            <param name="log">ILoggerFactory.</param>
         </member>
     </members>
 </doc>

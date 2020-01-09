@@ -12,11 +12,15 @@ namespace ModelViewController
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using ModelViewController.DAL;
     using ModelViewController.DAL.Entities;
     using ModelViewController.Services;
     using ModelViewController.Services.Abstract;
+    using ModelViewController.Services.Extensions;
     using SmartBreadcrumbs.Extensions;
+    using System;
+    using System.IO;
 
     /// <summary>
     /// Startup class.
@@ -80,8 +84,13 @@ namespace ModelViewController
         /// </summary>
         /// <param name="app">IApplicationBuilder.</param>
         /// <param name="env">IHostingEnvironment.</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        /// <param name="log">ILoggerFactory.</param>
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory log)
         {
+            var date = DateTime.Now.ToShortDateString();
+            log.AddFile(Path.Combine(Directory.GetCurrentDirectory() + "/Logs/", $"log_{date}.txt"));
+            var logger = log.CreateLogger("FileLogger");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -104,25 +113,7 @@ namespace ModelViewController
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                /*routes.MapRoute(
-                    name: "user",
-                    template: "user/{id}/{action}",
-                    defaults: new { controller = "Users", action = "Details" });
-                routes.MapRoute(
-                    name: "user-create",
-                    template: "create-user",
-                    defaults: new { controller = "Users", action = "Create" });
-                routes.MapRoute(
-                    name: "user-filter",
-                    template: "users/{name}",
-                    defaults: new { controller = "Users", action = "Filter" });
-
-                    routes.MapRoute(
-                         name: "award-user",
-                         template: "{controller=Home}/{action=Index}/{userid?}_{awardid?}",
-                         defaults: new { controller = "Users", action = "AddAwards" });*/
+                    template: "{controller=Home}/{action=Index}/{id?}/{otherId?}");
             });
         }
     }
