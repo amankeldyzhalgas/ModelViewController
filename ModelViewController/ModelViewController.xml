@@ -137,24 +137,30 @@
         </member>
         <member name="T:ModelViewController.Controllers.HomeController">
             <summary>
-            .
+            HomeController.
             </summary>
+        </member>
+        <member name="M:ModelViewController.Controllers.HomeController.#ctor(Microsoft.Extensions.Caching.Memory.IMemoryCache)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ModelViewController.Controllers.HomeController"/> class.
+            </summary>
+            <param name="cache">cache.</param>
         </member>
         <member name="M:ModelViewController.Controllers.HomeController.Index">
             <summary>
-            .
+            Index method.
             </summary>
             <returns>View.</returns>
         </member>
         <member name="M:ModelViewController.Controllers.HomeController.Privacy">
             <summary>
-            .
+            Privacy method.
             </summary>
             <returns>View.</returns>
         </member>
         <member name="M:ModelViewController.Controllers.HomeController.Error">
             <summary>
-            .
+            Error method.
             </summary>
             <returns>Error View.</returns>
         </member>
@@ -163,13 +169,14 @@
             Users Controller.
             </summary>
         </member>
-        <member name="M:ModelViewController.Controllers.UsersController.#ctor(ModelViewController.Services.Abstract.IUserRepository{ModelViewController.DAL.Entities.User},ModelViewController.Services.Abstract.IAwardRepository{ModelViewController.DAL.Entities.Award},ModelViewController.Services.Abstract.IRoleRepository{ModelViewController.DAL.Entities.Role})">
+        <member name="M:ModelViewController.Controllers.UsersController.#ctor(ModelViewController.Services.Abstract.IUserRepository{ModelViewController.DAL.Entities.User},ModelViewController.Services.Abstract.IAwardRepository{ModelViewController.DAL.Entities.Award},ModelViewController.Services.Abstract.IRoleRepository{ModelViewController.DAL.Entities.Role},Microsoft.Extensions.Caching.Memory.IMemoryCache)">
             <summary>
             Initializes a new instance of the <see cref="T:ModelViewController.Controllers.UsersController"/> class.
             </summary>
             <param name="userRepository">User repository.</param>
             <param name="awardRepository">Award repository.</param>
             <param name="roleRepository">Role repository.</param>
+            <param name="cache">cache.</param>
         </member>
         <member name="M:ModelViewController.Controllers.UsersController.Index">
             <summary>
@@ -211,7 +218,7 @@
             <param name="id">id.</param>
             <returns>View.</returns>
         </member>
-        <member name="M:ModelViewController.Controllers.UsersController.AddAwards(System.Guid,ModelViewController.Models.AddAwardModel)">
+        <member name="M:ModelViewController.Controllers.UsersController.AddAwards(System.Guid,ModelViewController.Models.ChangeUserAwardModel)">
             <summary>
             .
             </summary>
@@ -244,9 +251,17 @@
         </member>
         <member name="M:ModelViewController.Controllers.UsersController.ChangeRole(System.Nullable{System.Guid})">
             <summary>
-            ChangeRole.
+            ChangeRole method.
             </summary>
             <param name="id">id.</param>
+            <returns>View.</returns>
+        </member>
+        <member name="M:ModelViewController.Controllers.UsersController.ChangeRole(System.Guid,ModelViewController.Models.Users.ChangeUserRolesModel)">
+            <summary>
+            .
+            </summary>
+            <param name="userId">UserId.</param>
+            <param name="model">model.</param>
             <returns>View.</returns>
         </member>
         <member name="M:ModelViewController.Controllers.UsersController.Delete(System.Nullable{System.Guid})">
@@ -344,6 +359,21 @@
             Gets or sets Image.
             </summary>
         </member>
+        <member name="T:ModelViewController.Models.CacheModel">
+            <summary>
+            CacheModel class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.CacheModel.ChangedUsers">
+            <summary>
+            Gets or sets ChangedUsers.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.CacheModel.ChangedAwards">
+            <summary>
+            Gets or sets ChangedAwards.
+            </summary>
+        </member>
         <member name="T:ModelViewController.Models.ErrorViewModel">
             <summary>
             ErrorViewModel.
@@ -359,24 +389,19 @@
             Gets a value indicating whether .
             </summary>
         </member>
-        <member name="T:ModelViewController.Models.AddAwardModel">
+        <member name="T:ModelViewController.Models.ChangeUserAwardModel">
             <summary>
             AddAwardModel class.
             </summary>
         </member>
-        <member name="P:ModelViewController.Models.AddAwardModel.UserId">
+        <member name="P:ModelViewController.Models.ChangeUserAwardModel.UserId">
             <summary>
             Gets or sets UserId.
             </summary>
         </member>
-        <member name="P:ModelViewController.Models.AddAwardModel.UserAwards">
+        <member name="P:ModelViewController.Models.ChangeUserAwardModel.UserAwards">
             <summary>
-            Gets or sets userAwards.
-            </summary>
-        </member>
-        <member name="P:ModelViewController.Models.AddAwardModel.Awards">
-            <summary>
-            Gets or sets Awards.
+            Gets or sets UserRoles.
             </summary>
         </member>
         <member name="T:ModelViewController.Models.Users.ChangeUserRolesModel">
@@ -399,9 +424,49 @@
             Gets or sets UserRoles.
             </summary>
         </member>
-        <member name="P:ModelViewController.Models.Users.ChangeUserRolesModel.Roles">
+        <member name="T:ModelViewController.Models.Users.UserAwardModel">
             <summary>
-            Gets or sets UserRoles.
+            UserAwardModel class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.UserAwardModel.AwardId">
+            <summary>
+            Gets or sets AwardId.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.UserAwardModel.Title">
+            <summary>
+            Gets or sets Title.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.UserAwardModel.Image">
+            <summary>
+            Gets or sets Image.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.UserAwardModel.Selected">
+            <summary>
+            Gets or sets a value indicating whether .
+            </summary>
+        </member>
+        <member name="T:ModelViewController.Models.Users.UserRoleModel">
+            <summary>
+            RoleModel class.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.UserRoleModel.RoleId">
+            <summary>
+            Gets or sets RoleId.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.UserRoleModel.Name">
+            <summary>
+            Gets or sets Name.
+            </summary>
+        </member>
+        <member name="P:ModelViewController.Models.Users.UserRoleModel.Selected">
+            <summary>
+            Gets or sets a value indicating whether .
             </summary>
         </member>
         <member name="T:ModelViewController.Models.UserModel">
@@ -434,19 +499,9 @@
             Gets or sets PhotoSrc.
             </summary>
         </member>
-        <member name="P:ModelViewController.Models.UserModel.UserAwards">
-            <summary>
-            Gets or sets UserAwards.
-            </summary>
-        </member>
-        <member name="P:ModelViewController.Models.UserModel.Roles">
-            <summary>
-            Gets or sets Roles.
-            </summary>
-        </member>
         <member name="P:ModelViewController.Models.UserModel.Awards">
             <summary>
-            Gets or sets Awards.
+            Gets or sets UserAwards.
             </summary>
         </member>
         <member name="T:ModelViewController.Program">

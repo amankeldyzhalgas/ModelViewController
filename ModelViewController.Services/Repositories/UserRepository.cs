@@ -130,20 +130,6 @@ namespace ModelViewController.Services
         }
 
         /// <summary>
-        /// GetAllAsync method.
-        /// </summary>
-        /// <param name="param">param.</param>
-        /// <returns>user.</returns>
-        /*public async Task<List<User>> Filter(string param)
-        {
-            return await this._context.Users
-                .Include(u => u.UserAwards)
-                .ThenInclude(ua => ua.Award)
-                .Where(u => u.Name.StartsWith(param))
-                .ToListAsync();
-        }*/
-
-        /// <summary>
         /// Remove method.
         /// </summary>
         /// <param name="id">id.</param>
@@ -222,16 +208,48 @@ namespace ModelViewController.Services
         /// UpdateUserAwards method.
         /// </summary>
         /// <param name="user">User.</param>
+        /// <param name="award">Award.</param>
+        /// <returns>task.</returns>
+        public async Task AddUserAwards(User user, Guid award)
+        {
+            user.UserAwards.Add(new UserAward { UserId = user.Id, AwardId = award });
+            await this.Update(user);
+        }
+
+        /// <summary>
+        /// UpdateUserAwards method.
+        /// </summary>
+        /// <param name="user">User.</param>
         /// <param name="awards">Awards.</param>
         /// <returns>task.</returns>
-        public async Task UpdateUserAwards(User user, List<Award> awards)
+        public async Task UpdateUserAwards(User user, List<Guid> awards)
         {
             user.UserAwards.Clear();
             if (awards != null)
             {
                 foreach (var award in awards)
                 {
-                    user.UserAwards.Add(new UserAward { UserId = user.Id, AwardId = award.Id });
+                    user.UserAwards.Add(new UserAward { UserId = user.Id, AwardId = award });
+                }
+            }
+
+            await this.Update(user);
+        }
+
+        /// <summary>
+        /// UpdateUserRoles method.
+        /// </summary>
+        /// <param name="user">user.</param>
+        /// <param name="roles">roles.</param>
+        /// <returns>>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public async Task UpdateUserRoles(User user, List<Guid> roles)
+        {
+            user.UserRoles.Clear();
+            if (roles != null)
+            {
+                foreach (var role in roles)
+                {
+                    user.UserRoles.Add(new UserRole { UserId = user.Id, RoleId = role });
                 }
             }
 

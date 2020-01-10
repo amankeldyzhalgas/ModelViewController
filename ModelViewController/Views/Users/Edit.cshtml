@@ -34,14 +34,14 @@
                 <div class="row">
                     @if (Model.Awards != null)
                     {
-                        foreach (var award in Model.Awards)
+                        for (int i = 0; i < Model.Awards.UserAwards.Count(); i++)
                         {
                             <div class="col-md-3">
                                 <div class="custom-control custom-checkbox image-checkbox">
-                                    <input type="checkbox" name="Awards" value="@award.Id" id="@award.Id" class="custom-control-input"
-                                           @(Model.UserAwards.Contains(award) ? "checked=\"checked\"" : "") />
-                                    <label class="custom-control-label" for="@award.Id">
-                                        <img class="img-fluid" src="@award.Image" title="@award.Title" />
+                                    <input type="hidden" asp-for="Awards.UserAwards[i].AwardId" />
+                                    <input asp-for="Awards.UserAwards[i].Selected" type="checkbox" />
+                                    <label asp-for="Awards.UserAwards[i].Title" class="custom-control-label">
+                                        <img asp-for="" class="img-fluid" src="@Model.Awards.UserAwards[i].Image" title="@Model.Awards.UserAwards[i].Title" />
                                     </label>
                                 </div>
                             </div>

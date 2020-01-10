@@ -2,11 +2,11 @@
     @if (User.Identity.IsAuthenticated)
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-page="">Здравствуйте, @User.Identity.Name!</a>
+            <a class="nav-link text-dark" asp-area="" asp-page="">Hello, @User.Identity.Name!</a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="" asp-controller="Account" asp-action="LogOff" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark"><i class="fa fa-sign-out"></i> Выйти</button>
+                <button type="submit" class="nav-link btn btn-link text-dark"><i class="fa fa-sign-out"></i> Logout</button>
             </form>
         </li>
     }
@@ -16,7 +16,7 @@
             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register"><i class="fa fa-user-plus"></i> Register</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login"><i class="fa fa-sign-in"></i> Войти</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login"><i class="fa fa-sign-in"></i> Login</a>
         </li>
     }
 </ul>

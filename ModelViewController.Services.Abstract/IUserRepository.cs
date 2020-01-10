@@ -1,4 +1,4 @@
-﻿// <copyright file="IRepository.cs" company="PlaceholderCompany">
+﻿// <copyright file="IUserRepository.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -92,11 +92,27 @@ namespace ModelViewController.Services.Abstract
         void RemoveFile(string path);
 
         /// <summary>
+        /// AddUserAwards method.
+        /// </summary>
+        /// <param name="user">user.</param>
+        /// <param name="award">award.</param>
+        /// <returns>task.</returns>
+        Task AddUserAwards(User user, Guid award);
+
+        /// <summary>
         /// UpdateUserAwards method.
         /// </summary>
         /// <param name="item">item.</param>
         /// <param name="list">list.</param>
         /// <returns>task.</returns>
-        Task UpdateUserAwards(T item, List<Award> list);
+        Task UpdateUserAwards(T item, List<Guid> list);
+
+        /// <summary>
+        /// UpdateUserAwards method.
+        /// </summary>
+        /// <param name="item">item.</param>
+        /// <param name="list">list.</param>
+        /// <returns>task.</returns>
+        Task UpdateUserRoles(T item, List<Guid> list);
     }
 }

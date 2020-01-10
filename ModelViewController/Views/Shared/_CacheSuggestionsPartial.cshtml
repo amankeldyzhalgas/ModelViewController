@@ -1,0 +1,13 @@
+﻿@model bool
+
+@if (!Model)
+{
+    <form asp-action="CreateUser">
+        <div class="alert alert-info alert-dismissible fade show">
+            Some changes have been made, please choose one of the options?
+            <a asp-action="AcceptChanfes" class="btn btn-sm btn-success" title="accept"><i class='fas fa-check'></i></a>
+            <a asp-action="ViewChanges" class="btn btn-sm btn-info" title="details"><i class='fas fa-info'></i></a>
+            <a asp-action="RejectChanges" class="btn btn-sm btn-danger" title="reject"><i class='fas fa-ban'></i></a>
+        </div>
+    </form>
+}

@@ -28,11 +28,6 @@ namespace ModelViewController.Models.Users
         /// <summary>
         /// Gets or sets UserRoles.
         /// </summary>
-        public List<Role> UserRoles { get; set; }
-
-        /// <summary>
-        /// Gets or sets UserRoles.
-        /// </summary>
-        public List<Role> Roles { get; set; }
+        public List<UserRoleModel> UserRoles { get; set; }
     }
 }

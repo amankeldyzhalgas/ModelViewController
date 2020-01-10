@@ -2,10 +2,10 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-using System.ComponentModel.DataAnnotations;
-
 namespace ModelViewController.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// LoginModel class.
     /// </summary>

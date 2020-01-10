@@ -48,16 +48,6 @@ namespace ModelViewController.Models
         /// <summary>
         /// Gets or sets UserAwards.
         /// </summary>
-        public List<Award> UserAwards { get; set; }
-
-        /// <summary>
-        /// Gets or sets Roles.
-        /// </summary>
-        public List<Guid> Roles { get; set; }
-
-        /// <summary>
-        /// Gets or sets Awards.
-        /// </summary>
-        public List<Award> Awards { get; set; }
+        public ChangeUserAwardModel Awards { get; set; }
     }
 }

@@ -4,6 +4,8 @@
 
 namespace ModelViewController
 {
+    using System;
+    using System.IO;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -19,8 +21,6 @@ namespace ModelViewController
     using ModelViewController.Services.Abstract;
     using ModelViewController.Services.Extensions;
     using SmartBreadcrumbs.Extensions;
-    using System;
-    using System.IO;
 
     /// <summary>
     /// Startup class.

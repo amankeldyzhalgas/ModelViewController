@@ -1,4 +1,4 @@
-﻿// <copyright file="AddAwardModel.cs" company="PlaceholderCompany">
+﻿// <copyright file="ChangeUserAwardModel.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,11 +7,12 @@ namespace ModelViewController.Models
     using System;
     using System.Collections.Generic;
     using ModelViewController.DAL.Entities;
+    using ModelViewController.Models.Users;
 
     /// <summary>
     /// AddAwardModel class.
     /// </summary>
-    public class AddAwardModel
+    public class ChangeUserAwardModel
     {
         /// <summary>
         /// Gets or sets UserId.
@@ -19,13 +20,8 @@ namespace ModelViewController.Models
         public Guid UserId { get; set; }
 
         /// <summary>
-        /// Gets or sets userAwards.
+        /// Gets or sets UserRoles.
         /// </summary>
-        public List<Award> UserAwards { get; set; }
-
-        /// <summary>
-        /// Gets or sets Awards.
-        /// </summary>
-        public List<Award> Awards { get; set; }
+        public List<UserAwardModel> UserAwards { get; set; }
     }
 }

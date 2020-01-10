@@ -198,7 +198,23 @@
             </summary>
             <param name="path">path.</param>
         </member>
-        <member name="M:ModelViewController.Services.Abstract.IUserRepository`1.UpdateUserAwards(`0,System.Collections.Generic.List{ModelViewController.DAL.Entities.Award})">
+        <member name="M:ModelViewController.Services.Abstract.IUserRepository`1.AddUserAwards(ModelViewController.DAL.Entities.User,System.Guid)">
+            <summary>
+            AddUserAwards method.
+            </summary>
+            <param name="user">user.</param>
+            <param name="award">award.</param>
+            <returns>task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IUserRepository`1.UpdateUserAwards(`0,System.Collections.Generic.List{System.Guid})">
+            <summary>
+            UpdateUserAwards method.
+            </summary>
+            <param name="item">item.</param>
+            <param name="list">list.</param>
+            <returns>task.</returns>
+        </member>
+        <member name="M:ModelViewController.Services.Abstract.IUserRepository`1.UpdateUserRoles(`0,System.Collections.Generic.List{System.Guid})">
             <summary>
             UpdateUserAwards method.
             </summary>

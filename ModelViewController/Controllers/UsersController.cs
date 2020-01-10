@@ -12,6 +12,7 @@ namespace ModelViewController.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.Memory;
     using ModelViewController.DAL.Entities;
     using ModelViewController.Models;
     using ModelViewController.Models.Users;
@@ -29,6 +30,7 @@ namespace ModelViewController.Controllers
         private readonly IUserRepository<User> _userRepository;
         private readonly IAwardRepository<Award> _awardRepository;
         private readonly IRoleRepository<Role> _roleRepository;
+        private readonly IMemoryCache _cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UsersController"/> class.
@@ -36,11 +38,17 @@ namespace ModelViewController.Controllers
         /// <param name="userRepository">User repository.</param>
         /// <param name="awardRepository">Award repository.</param>
         /// <param name="roleRepository">Role repository.</param>
-        public UsersController(IUserRepository<User> userRepository, IAwardRepository<Award> awardRepository, IRoleRepository<Role> roleRepository)
+        /// <param name="cache">cache.</param>
+        public UsersController(
+            IUserRepository<User> userRepository,
+            IAwardRepository<Award> awardRepository,
+            IRoleRepository<Role> roleRepository,
+            IMemoryCache cache)
         {
             this._userRepository = userRepository;
             this._awardRepository = awardRepository;
             this._roleRepository = roleRepository;
+            this._cache = cache;
         }
 
         // GET: Users
@@ -53,6 +61,17 @@ namespace ModelViewController.Controllers
         [Route("/users")]
         public async Task<IActionResult> Index()
         {
+            /*this._cache.TryGetValue(this.User.Identity.Name, out CacheModel changes);
+            if (changes != null)
+            {
+                this.ViewBag.CacheDatas = changes;
+                this.ViewBag.CacheIsEmpty = false;
+            }
+            else
+            {
+                this.ViewBag.CacheIsEmpty = true;
+            }*/
+
             return this.View(await this._userRepository.GetAllAsync());
         }
 
@@ -64,6 +83,17 @@ namespace ModelViewController.Controllers
         [Route("/users/{name}")]
         public async Task<IActionResult> Index(string name)
         {
+            /*this._cache.TryGetValue(this.User.Identity.Name, out CacheModel changes);
+            if (changes != null)
+            {
+                this.ViewBag.CacheDatas = changes;
+                this.ViewBag.CacheIsEmpty = false;
+            }
+            else
+            {
+                this.ViewBag.CacheIsEmpty = true;
+            }*/
+
             return this.View(await this._userRepository.Filter(name));
         }
 
@@ -105,7 +135,7 @@ namespace ModelViewController.Controllers
         /// </summary>
         /// <returns>Create View.</returns>
         [Breadcrumb("Create")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, candidate")]
         [Route("/create-user")]
         public IActionResult Create()
         {
@@ -125,7 +155,7 @@ namespace ModelViewController.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Breadcrumb("Create")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, candidate")]
         [Route("/create-user")]
         public async Task<IActionResult> Create(UserModel model)
         {
@@ -139,12 +169,20 @@ namespace ModelViewController.Controllers
                     return this.View(model);
                 }
 
+                if (this.User.IsInRole("candidate"))
+                {
+                    // TODO: Add Cache
+                    this.AddCache(model, Models.Action.Add);
+                    return this.RedirectToAction(nameof(this.Index));
+                }
+
                 var user = new User { Name = model.Name, Birthdate = model.Birthdate };
                 user = await this._userRepository.Add(user);
 
-                if (model.Awards != null)
+                if (model.Awards.UserAwards != null)
                 {
-                    await this._userRepository.UpdateUserAwards(user, model.Awards);
+                    var awards = model.Awards.UserAwards.Where(ua => ua.Selected).Select(ua => ua.AwardId).ToList();
+                    await this._userRepository.UpdateUserAwards(user, awards);
                 }
 
                 if (model.Photo != null)
@@ -155,7 +193,6 @@ namespace ModelViewController.Controllers
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.ViewData["Awards"] = this._awardRepository.GetAll();
             return this.View(model);
         }
 
@@ -175,13 +212,32 @@ namespace ModelViewController.Controllers
             var user = await this._userRepository.Find(id);
             var userAwards = await this._userRepository.GetUserAwards(id);
             var awards = await this._awardRepository.GetAllAsync();
-            var model = new AddAwardModel { UserId = user.Id, Awards = awards, UserAwards = userAwards };
+
+            List<UserAwardModel> userAwardModels = new List<UserAwardModel>();
+            foreach (var award in awards)
+            {
+                UserAwardModel userAwardModel = new UserAwardModel
+                {
+                    AwardId = award.Id,
+                    Title = award.Title,
+                    Image = award.Image,
+                    Selected = userAwards.Contains(award),
+                };
+                userAwardModels.Add(userAwardModel);
+            }
+
+            ChangeUserAwardModel changeUserAwardModel = new ChangeUserAwardModel
+            {
+                UserId = user.Id,
+                UserAwards = userAwardModels,
+            };
+
             if (user == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(model);
+            return this.View(changeUserAwardModel);
         }
 
         /// <summary>
@@ -193,7 +249,7 @@ namespace ModelViewController.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Breadcrumb("AddAwards")]
-        public async Task<IActionResult> AddAwards(Guid id, AddAwardModel model)
+        public async Task<IActionResult> AddAwards(Guid id, ChangeUserAwardModel model)
         {
             if (id != model.UserId)
             {
@@ -205,9 +261,13 @@ namespace ModelViewController.Controllers
                 try
                 {
                     var user = await this._userRepository.Find(id);
-                    if (model.Awards != null)
+                    if (model.UserAwards != null)
                     {
-                        await this._userRepository.UpdateUserAwards(user, model.Awards);
+                        var awards = model.UserAwards.Where(ur => ur.Selected).Select(ur => ur.AwardId).ToList();
+                        if (awards != null)
+                        {
+                            await this._userRepository.UpdateUserAwards(user, awards);
+                        }
                     }
                 }
                 catch (DbUpdateConcurrencyException)
@@ -225,7 +285,6 @@ namespace ModelViewController.Controllers
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.ViewData["Awards"] = this._awardRepository.GetAll();
             return this.View(model);
         }
 
@@ -246,13 +305,15 @@ namespace ModelViewController.Controllers
             try
             {
                 var user = await this._userRepository.Find(id);
+
                 var award = await this._awardRepository.Find(awardId);
                 if (award != null)
                 {
                     var awards = new List<Award>();
                     awards.Add(award);
-                    await this._userRepository.UpdateUserAwards(user, awards);
                 }
+
+                await this._userRepository.AddUserAwards(user, awardId);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -276,7 +337,7 @@ namespace ModelViewController.Controllers
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         // GET: Users/Edit/5
         [Breadcrumb("Edit")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, candidate")]
         [Route("/user/{id}/edit")]
         public async Task<IActionResult> Edit(Guid? id)
         {
@@ -288,7 +349,27 @@ namespace ModelViewController.Controllers
             var user = await this._userRepository.Find(id);
             var userAwards = await this._userRepository.GetUserAwards(id);
             var awards = await this._awardRepository.GetAllAsync();
-            var model = new UserModel { Id = user.Id, Name = user.Name, Birthdate = user.Birthdate, PhotoSrc = user.Photo, UserAwards = userAwards, Awards = awards };
+
+            List<UserAwardModel> userAwardModels = new List<UserAwardModel>();
+            foreach (var award in awards)
+            {
+                UserAwardModel userAwardModel = new UserAwardModel
+                {
+                    AwardId = award.Id,
+                    Title = award.Title,
+                    Image = award.Image,
+                    Selected = userAwards.Contains(award),
+                };
+                userAwardModels.Add(userAwardModel);
+            }
+
+            ChangeUserAwardModel changeUserAwardModel = new ChangeUserAwardModel
+            {
+                UserId = user.Id,
+                UserAwards = userAwardModels,
+            };
+
+            var model = new UserModel { Id = user.Id, Name = user.Name, Birthdate = user.Birthdate, PhotoSrc = user.Photo, Awards = changeUserAwardModel };
             if (user == null)
             {
                 return this.NotFound();
@@ -310,7 +391,7 @@ namespace ModelViewController.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Breadcrumb("Edit")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, candidate")]
         [Route("/user/{id}/edit")]
         public async Task<IActionResult> Edit(Guid id, UserModel model)
         {
@@ -326,7 +407,12 @@ namespace ModelViewController.Controllers
                     var user = await this._userRepository.Find(id);
                     user.Name = model.Name;
                     user.Birthdate = model.Birthdate;
-                    await this._userRepository.UpdateUserAwards(user, model.Awards);
+
+                    var awards = model.Awards.UserAwards.Where(ur => ur.Selected).Select(ur => ur.AwardId).ToList();
+                    if (awards != null)
+                    {
+                        await this._userRepository.UpdateUserAwards(user, awards);
+                    }
 
                     if (model.Photo != null)
                     {
@@ -355,7 +441,7 @@ namespace ModelViewController.Controllers
         }
 
         /// <summary>
-        /// ChangeRole.
+        /// ChangeRole method.
         /// </summary>
         /// <param name="id">id.</param>
         /// <returns>View.</returns>
@@ -371,13 +457,74 @@ namespace ModelViewController.Controllers
             var user = await this._userRepository.Find(id);
             var userRoles = await this._userRepository.GetUserRoles(id);
             var roles = await this._roleRepository.GetAllAsync();
-            var model = new ChangeUserRolesModel { UserId = user.Id, UserName = user.UserName,  UserRoles = userRoles, Roles = roles };
+
+            List<UserRoleModel> roleModels = new List<UserRoleModel>();
+            foreach (var role in roles)
+            {
+                UserRoleModel roleModel = new UserRoleModel
+                {
+                    RoleId = role.Id,
+                    Name = role.DisplayName,
+                    Selected = userRoles.Contains(role),
+                };
+                roleModels.Add(roleModel);
+            }
+
+            ChangeUserRolesModel changeUserRoles = new ChangeUserRolesModel
+            {
+                UserId = user.Id,
+                UserName = user.Name,
+                UserRoles = roleModels,
+            };
+
             if (user == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(model);
+            return this.View(changeUserRoles);
+        }
+
+        /// <summary>
+        /// .
+        /// </summary>
+        /// <param name="userId">UserId.</param>
+        /// <param name="model">model.</param>
+        /// <returns>View.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Breadcrumb("ChangeRole")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> ChangeRole(Guid userId, [Bind("UserId,UserName,UserRoles")] ChangeUserRolesModel model)
+        {
+            if (userId != model.UserId)
+            {
+                return this.NotFound();
+            }
+
+            if (this.ModelState.IsValid)
+            {
+                try
+                {
+                    var user = await this._userRepository.Find(userId);
+                    var roles = model.UserRoles.Where(ur => ur.Selected).Select(ur => ur.RoleId).ToList();
+
+                    await this._userRepository.UpdateUserRoles(user, roles);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!this.UserExists(model.UserId))
+                    {
+                        return this.NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Users/Delete/5
@@ -388,7 +535,7 @@ namespace ModelViewController.Controllers
         /// <param name="id">User Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [Breadcrumb("Delete")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, candidate")]
         [Route("/user/{id}/delete")]
         public async Task<IActionResult> Delete(Guid? id)
         {
@@ -414,9 +561,10 @@ namespace ModelViewController.Controllers
         /// <param name="id">User Id.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost]
-        [ActionName("Delete")]
-        [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
+        [ActionName("Delete")]
+        [Authorize(Roles = "admin, candidate")]
+        [Route("/user/{id}/delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             await this._userRepository.Remove(id);
@@ -462,6 +610,43 @@ namespace ModelViewController.Controllers
         private bool UserExists(Guid id)
         {
             return this._userRepository.GetAll().Any(e => e.Id == id);
+        }
+
+        // TODO: action{add,update,remove}
+        private void AddCache(UserModel model, Models.Action action)
+        {
+            if (!this._cache.TryGetValue(this.User.Identity.Name, out CacheModel cacheValues))
+            {
+                cacheValues = new CacheModel()
+                {
+                    AddedUsers = new List<UserModel>(),
+                    UpdatedUsers = new List<UserModel>(),
+                    DeletedUsers = new List<UserModel>(),
+                    AddedAwards = new List<AwardModel>(),
+                    UpdatedAwards = new List<AwardModel>(),
+                    DeletedAwards = new List<AwardModel>(),
+                };
+            }
+
+            switch (action)
+            {
+                case Models.Action.Add:
+                    cacheValues.AddedUsers.Add(model);
+                    break;
+                case Models.Action.Update:
+                    cacheValues.UpdatedUsers.Add(model);
+                    break;
+                case Models.Action.Remove:
+                    cacheValues.DeletedUsers.Add(model);
+                    break;
+                default:
+                    break;
+            }
+
+            this._cache.Set(
+                this.User.Identity.Name,
+                cacheValues,
+                new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(300)));
         }
     }
 }

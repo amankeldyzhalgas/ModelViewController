@@ -5,12 +5,14 @@
 namespace ModelViewController.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.Memory;
     using ModelViewController.DAL.Entities;
     using ModelViewController.Models;
     using ModelViewController.Services.Abstract;
@@ -20,18 +22,21 @@ namespace ModelViewController.Controllers
     /// Awards Controller.
     /// </summary>
     [Breadcrumb("Awards")]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin, candidate")]
     public class AwardsController : Controller
     {
         private readonly IAwardRepository<Award> _repository;
+        private readonly IMemoryCache _cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AwardsController"/> class.
         /// </summary>
         /// <param name="repository">Repository.</param>
-        public AwardsController(IAwardRepository<Award> repository)
+        /// <param name="cache">cache.</param>
+        public AwardsController(IAwardRepository<Award> repository, IMemoryCache cache)
         {
             this._repository = repository;
+            this._cache = cache;
         }
 
         // GET: Awards
@@ -72,7 +77,6 @@ namespace ModelViewController.Controllers
             {
                 return this.NotFound();
             }
-
 
             if (Guid.TryParse(id, out Guid guid))
             {
@@ -118,6 +122,13 @@ namespace ModelViewController.Controllers
         {
             if (this.ModelState.IsValid)
             {
+
+                if (this.User.IsInRole("candidate"))
+                {
+                    this.AddCache(model);
+                    return this.RedirectToAction(nameof(this.Index));
+                }
+
                 var award = new Award { Title = model.Title, Description = model.Description };
                 await this._repository.Add(award);
                 if (model.Image != null)
@@ -250,6 +261,43 @@ namespace ModelViewController.Controllers
         private bool AwardExists(Guid id)
         {
             return this._repository.GetAll().Any(e => e.Id == id);
+        }
+
+        // TODO: action{add,update,remove}
+        private void AddCache(AwardModel model, Models.Action action)
+        {
+            if (!this._cache.TryGetValue(this.User.Identity.Name, out CacheModel cacheValues))
+            {
+                cacheValues = new CacheModel()
+                {
+                    AddedUsers = new List<UserModel>(),
+                    UpdatedUsers = new List<UserModel>(),
+                    DeletedUsers = new List<UserModel>(),
+                    AddedAwards = new List<AwardModel>(),
+                    UpdatedAwards = new List<AwardModel>(),
+                    DeletedAwards = new List<AwardModel>(),
+                };
+            }
+
+            switch (action)
+            {
+                case Models.Action.Add:
+                    cacheValues.AddedAwards.Add(model);
+                    break;
+                case Models.Action.Update:
+                    cacheValues.UpdatedAwards.Add(model);
+                    break;
+                case Models.Action.Remove:
+                    cacheValues.DeletedAwards.Add(model);
+                    break;
+                default:
+                    break;
+            }
+
+            this._cache.Set(
+                this.User.Identity.Name,
+                cacheValues,
+                new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(300)));
         }
     }
 }
